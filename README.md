@@ -16,13 +16,26 @@
 
 ---
 
-## 🌟 About The Project
+## 🌟 About VetCare AI
 
-**VetCare AI** is a modern AI-powered animal healthcare platform designed to help farmers and pet owners detect diseases instantly, receive intelligent treatment guidance, and connect with verified veterinarians — all through a single scalable web application.
+<p align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?size=24&duration=4000&color=8B5CF6&center=true&vCenter=true&width=950&lines=AI-Driven+Animal+Healthcare+Platform;Empowering+Farmers+%26+Pet+Owners;Smart+Diagnosis+%7C+Instant+Guidance+%7C+Verified+Vets" />
+</p>
 
-It bridges the gap between **traditional veterinary care** and **AI-driven digital healthcare infrastructure**.
+<p align="center">
+  <i>
+  VetCare AI is a modern AI-powered animal healthcare platform built to deliver instant disease detection, intelligent treatment recommendations, and seamless veterinary connectivity — all within a scalable web ecosystem.
+  </i>
+</p>
+
+<p align="center">
+  <b>
+  Bridging traditional veterinary practices with advanced AI-driven digital healthcare infrastructure.
+  </b>
+</p>
 
 ---
+
 
 ## ✨ Key Features
 
@@ -33,8 +46,6 @@ It bridges the gap between **traditional veterinary care** and **AI-driven digit
 - 🔐 Secure Authentication (Clerk)  
 - ⚡ High-Performance UI (Next.js 16)  
 - 🗄 Scalable Cloud Database (Neon + Prisma)  
-
----
 
 
 
@@ -61,45 +72,10 @@ npm run dev
 Open → http://localhost:3000
 ```
 
-🧬 System Architecture
-Frontend (Next.js + Tailwind)
-        ↓
-Authentication (Clerk)
-        ↓
-API Routes (Next.js)
-        ↓
-Prisma ORM
-        ↓
-Neon PostgreSQL Database
-
----
-
-## 🌱 Future Enhancements
-
-<p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?size=22&duration=4000&color=F59E0B&center=true&vCenter=true&width=900&lines=Continuous+Innovation+Roadmap+%F0%9F%9A%80;Scaling+VetCare+AI+for+Global+Impact;Smarter+AI+Models+%26+Expanded+Features" />
-</p>
-
-- 💳 Subscription & Credit-Based System  
-- 📍 Geo-Based Smart Vet Discovery  
-- 🐄 Multi-Animal AI Detection  
-- 📱 Progressive Web App (PWA)  
-- 📊 Advanced Analytics Dashboard  
-- 🤖 Real-Time AI Model Optimization  
-
----
-
-## 👨‍💻 Author
-
-<p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?size=22&duration=3500&color=4F46E5&center=true&vCenter=true&width=700&lines=Built+with+Passion+by+Abhay+Kumar+Yadav;Full-Stack+Developer+%7C+AI+Enthusiast;Focused+on+Impact-Driven+Innovation" />
-</p>
-
-**Abhay Kumar Yadav**  
-B.Tech IT | Full-Stack Developer  
 
 
----
+
+
 
 <p align="center">
   <img src="https://readme-typing-svg.herokuapp.com?size=20&duration=4000&color=10B981&center=true&vCenter=true&width=700&lines=Transforming+Animal+Healthcare+with+Artificial+Intelligence+%F0%9F%9A%80" />
