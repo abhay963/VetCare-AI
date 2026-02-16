@@ -36,18 +36,7 @@ It bridges the gap between **traditional veterinary care** and **AI-driven digit
 
 ---
 
-## 🛠 Tech Stack
 
-| Technology | Purpose |
-|------------|----------|
-| Next.js 16 | Full-stack React framework |
-| TypeScript | Type-safe scalable development |
-| Prisma ORM | Database modeling & queries |
-| PostgreSQL (Neon) | Serverless cloud database |
-| Clerk | Authentication & user management |
-| Tailwind CSS | Modern responsive UI |
-
----
 
 ## 🚀 Getting Started
 
@@ -109,7 +98,6 @@ Neon PostgreSQL Database
 **Abhay Kumar Yadav**  
 B.Tech IT | Full-Stack Developer  
 
-Passionate about building AI-driven healthcare solutions that create real-world impact in rural and urban ecosystems.
 
 ---
 
