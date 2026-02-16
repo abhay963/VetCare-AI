@@ -1,50 +1,46 @@
 🐾🤖 VetCare AI
-<p align="center"> <img src="https://readme-typing-svg.herokuapp.com?size=25&duration=3000&color=6C47FF&center=true&vCenter=true&width=600&lines=AI-Powered+Animal+Healthcare;Smart+Disease+Detection+%F0%9F%A9%BA;Vet+Booking+Platform+%F0%9F%90%BE;Built+with+Next.js+%2B+TypeScript" /> </p> <p align="center"> <b>Empowering Farmers & Pet Owners with Intelligent Veterinary Support</b> </p>
-🚀 Tech Stack
-<p align="center"> <img src="https://skillicons.dev/icons?i=nextjs,ts,prisma,postgres" /> </p>
+<p align="center"> <img src="https://readme-typing-svg.herokuapp.com?size=28&duration=3500&color=4F46E5&center=true&vCenter=true&width=750&lines=AI-Powered+Veterinary+Healthcare+Platform;Smart+Disease+Detection+%F0%9F%A9%BA;Intelligent+Vet+Booking+System+%F0%9F%90%BE;Built+with+Next.js+%2B+TypeScript+%2B+Prisma" /> </p> <p align="center"> <b>Bringing Intelligent, Accessible, and Scalable Animal Healthcare to Everyone.</b> </p>
+🚀 Technology Stack
+<p align="center"> <img src="https://skillicons.dev/icons?i=nextjs,ts,prisma,postgres" /> </p> <p align="center"> <img src="https://img.shields.io/badge/Neon-PostgreSQL-00E699?style=for-the-badge" /> <img src="https://img.shields.io/badge/Clerk-Authentication-6C47FF?style=for-the-badge" /> </p>
 
-⚡ Next.js
+Next.js – Full-stack React framework
 
-🔷 TypeScript
+TypeScript – Scalable type-safe development
 
-🗄 Neon PostgreSQL
+Prisma ORM – Elegant database management
 
-🔐 Clerk Authentication
+Neon PostgreSQL – Cloud-native database
 
-🧩 Prisma ORM
+Clerk – Secure authentication & user management
 
-🧠 Core Features
+🧠 Core Capabilities
 
-📸 AI-based animal disease detection
-
-📝 Symptom analysis system
-
-💊 Remedy & diet suggestions
-
-🩺 Nearby vet discovery & booking
-
-🔐 Secure authentication & dashboard
+✨ AI-powered disease detection from images
+📝 Intelligent symptom analysis
+💊 Personalized remedy & nutrition guidance
+🩺 Nearby veterinarian discovery & booking
+🔐 Secure user authentication & dashboard
 
 🎯 Vision
-<p align="center"> <img src="https://readme-typing-svg.herokuapp.com?size=22&duration=3500&color=00C896&center=true&vCenter=true&width=700&lines=Revolutionizing+Animal+Healthcare+with+AI+%F0%9F%A4%96;Bridging+the+Gap+Between+Farmers+and+Veterinary+Care+%F0%9F%90%84;Making+Vet+Support+Accessible+Everywhere+%F0%9F%8C%8D" /> </p>
+<p align="center"> <img src="https://readme-typing-svg.herokuapp.com?size=24&duration=4000&color=00BFA6&center=true&vCenter=true&width=800&lines=Revolutionizing+Animal+Healthcare+Through+Artificial+Intelligence;Bridging+the+Gap+Between+Farmers+and+Veterinary+Services;Making+Quality+Vet+Care+Accessible+Across+Rural+and+Urban+Regions" /> </p>
 
-Transforming rural and urban animal healthcare through intelligent, accessible, and technology-driven solutions.
+VetCare AI aims to modernize veterinary healthcare by integrating artificial intelligence with accessible digital infrastructure, ensuring every animal receives timely and reliable medical support.
 
 🤝 Contributing
-<p align="center"> <img src="https://readme-typing-svg.herokuapp.com?size=22&duration=3000&color=FF6B6B&center=true&vCenter=true&width=600&lines=Contributions+Are+Welcome+%F0%9F%92%99;Let%E2%80%99s+Build+Something+Impactful+Together+%F0%9F%9A%80" /> </p>
+<p align="center"> <img src="https://readme-typing-svg.herokuapp.com?size=24&duration=3500&color=F43F5E&center=true&vCenter=true&width=700&lines=Open+to+Collaboration+%F0%9F%92%99;Let%E2%80%99s+Build+Impactful+Technology+Together+%F0%9F%9A%80" /> </p>
 
-We welcome developers, designers, and AI enthusiasts to collaborate and improve VetCare AI.
+We welcome contributions from developers, designers, and AI enthusiasts who share our mission of improving animal healthcare through technology.
 
-📌 How to Contribute
-# Fork the repository
-# Create a new branch
-git checkout -b feature-name
+Contribution Workflow
+# 1. Fork the repository
 
-# Commit your changes
-git commit -m "Add new feature"
+# 2. Create a feature branch
+git checkout -b feature/your-feature-name
 
-# Push and create a Pull Request
+# 3. Commit changes
+git commit -m "feat: add new feature"
 
-⭐ Support
+# 4. Push to your branch
+git push origin feature/your-feature-name
 
-If you like this project, consider giving it a ⭐ on GitHub!
+# 5. Open a Pull Request
