@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+🐾🤖 VetCare AI
+<p align="center"> <img src="https://readme-typing-svg.herokuapp.com?size=25&duration=3000&color=6C47FF&center=true&vCenter=true&width=600&lines=AI-Powered+Animal+Healthcare;Smart+Disease+Detection+%F0%9F%A9%BA;Vet+Booking+Platform+%F0%9F%90%BE;Built+with+Next.js+%2B+TypeScript" /> </p> <p align="center"> <b>Empowering Farmers & Pet Owners with Intelligent Veterinary Support</b> </p>
+🚀 Tech Stack
+<p align="center"> <img src="https://skillicons.dev/icons?i=nextjs,ts,prisma,postgres" /> </p>
 
-## Getting Started
+⚡ Next.js
 
-First, run the development server:
+🔷 TypeScript
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+🗄 Neon PostgreSQL
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+🔐 Clerk Authentication
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+🧩 Prisma ORM
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+🧠 Core Features
 
-## Learn More
+📸 AI-based animal disease detection
 
-To learn more about Next.js, take a look at the following resources:
+📝 Symptom analysis system
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+💊 Remedy & diet suggestions
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+🩺 Nearby vet discovery & booking
 
-## Deploy on Vercel
+🔐 Secure authentication & dashboard
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+🎯 Vision
+<p align="center"> <img src="https://readme-typing-svg.herokuapp.com?size=22&duration=3500&color=00C896&center=true&vCenter=true&width=700&lines=Revolutionizing+Animal+Healthcare+with+AI+%F0%9F%A4%96;Bridging+the+Gap+Between+Farmers+and+Veterinary+Care+%F0%9F%90%84;Making+Vet+Support+Accessible+Everywhere+%F0%9F%8C%8D" /> </p>
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Transforming rural and urban animal healthcare through intelligent, accessible, and technology-driven solutions.
+
+🤝 Contributing
+<p align="center"> <img src="https://readme-typing-svg.herokuapp.com?size=22&duration=3000&color=FF6B6B&center=true&vCenter=true&width=600&lines=Contributions+Are+Welcome+%F0%9F%92%99;Let%E2%80%99s+Build+Something+Impactful+Together+%F0%9F%9A%80" /> </p>
+
+We welcome developers, designers, and AI enthusiasts to collaborate and improve VetCare AI.
+
+📌 How to Contribute
+# Fork the repository
+# Create a new branch
+git checkout -b feature-name
+
+# Commit your changes
+git commit -m "Add new feature"
+
+# Push and create a Pull Request
+
+⭐ Support
+
+If you like this project, consider giving it a ⭐ on GitHub!
