@@ -18,9 +18,7 @@
 
 ## 🌟 About VetCare AI
 
-<p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?size=24&duration=4000&color=8B5CF6&center=true&vCenter=true&width=950&lines=AI-Driven+Animal+Healthcare+Platform;Empowering+Farmers+%26+Pet+Owners;Smart+Diagnosis+%7C+Instant+Guidance+%7C+Verified+Vets" />
-</p>
+
 
 <p align="center">
   <i>
