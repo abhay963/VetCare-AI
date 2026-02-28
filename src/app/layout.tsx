@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from '@clerk/nextjs'
+import UserSync from "@/components/UserSync";
+import TanStackProvider from "@/components/providers/TanStackProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+    <TanStackProvider>
     <html lang="en" className="dark">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -51,9 +54,12 @@ export default function RootLayout({
     borderRadius: "0.6rem"
   },
 }}>
+
+  <UserSync/>
           {children}
         </ClerkProvider>
       </body>
     </html>
+    </TanStackProvider>
   );
 }
