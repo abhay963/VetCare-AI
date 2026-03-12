@@ -104,7 +104,7 @@ function Footer() {
         {/* Bottom Section */}
         <div className="border-t mt-10 pt-8 text-center text-sm text-muted-foreground">
           <p>
-            © {new Date().getFullYear()} PashuSaathi. Empowering animal health through AI.
+            © {new Date().getFullYear()} VetCare AI. Empowering animal health through AI.
           </p>
         </div>
       </div>
