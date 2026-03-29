@@ -8,8 +8,7 @@ import { Badge } from "../ui/badge";
 import AddDoctorDialog from "./AddDoctorDialog";
 import EditDoctorDialog from "./EditDoctorDialog";
 import { Doctor } from "@prisma/client";
-import { createAvatar } from "@dicebear/core";
-import { adventurer, avataaars } from "@dicebear/collection";
+
 function DoctorsManagement() {
   const { data: doctors = [] } = useGetDoctors();
 
@@ -27,35 +26,25 @@ function DoctorsManagement() {
     setSelectedDoctor(null);
   };
 
- 
+  const getAvatar = (doctor: Doctor) => {
+    if (
+      doctor.imageUrl &&
+      doctor.imageUrl.startsWith("http") &&
+      !doctor.imageUrl.includes("avatar.iran.liara.run")
+    ) {
+      return doctor.imageUrl;
+    }
 
+    const base = "https://avatar.iran.liara.run/public";
+    const genderPath = doctor.gender === "MALE" ? "boy" : "girl";
+    const username = doctor.name.replace(/\s+/g, "").toLowerCase();
 
-
-const getAvatar = (doctor: Doctor) => {
-  if (
-    doctor.imageUrl &&
-    doctor.imageUrl.startsWith("http") &&
-    !doctor.imageUrl.includes("avatar.iran.liara.run")
-  ) {
-    return doctor.imageUrl;
-  }
-
-  const seed = doctor.name || "Doctor";
-
-  const style = doctor.gender === "MALE" ? adventurer : avataaars;
-
-  const avatar = createAvatar(style, {
-    seed,
-    size: 128,
-    radius: 50, // circle avatar
-  });
-
-  return avatar.toDataUri(); // ✅ NO API CALL
-};
+    return `${base}/${genderPath}?username=${username}`;
+  };
 
   return (
     <>
-      <Card className="mb-12 shadow-lg border border-border/40">
+      <Card className="mb-12 shadow-md border border-border/50">
         <CardHeader className="flex items-center justify-between">
           <div>
             <CardTitle className="flex items-center gap-2 text-lg">
@@ -69,7 +58,7 @@ const getAvatar = (doctor: Doctor) => {
 
           <Button
             onClick={() => setIsAddDialogOpen(true)}
-            className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/100 shadow-md"
+            className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/100 shadow-sm"
           >
             <PlusIcon className="mr-2 size-4" />
             Add Doctor
@@ -81,24 +70,17 @@ const getAvatar = (doctor: Doctor) => {
             {doctors.map((doctor) => (
               <div
                 key={doctor.id}
-                className="flex items-center justify-between p-4 bg-muted/30 rounded-xl border border-border/50 hover:shadow-md transition-all duration-200"
+                className="flex items-center justify-between p-4 bg-muted/30 rounded-xl border border-border/50 hover:shadow-md transition-all"
               >
                 <div className="flex items-center gap-4">
-                  <div className="relative">
-                    <Image
-                      src={getAvatar(doctor)}
-                      alt={doctor.name}
-                      width={48}
-                      height={48}
-                      className="size-12 rounded-full object-cover ring-2 ring-primary/20"
-                      onError={(e) => {
-                        // ✅ FINAL FALLBACK (never breaks)
-                        (e.target as HTMLImageElement).src =
-                          "https://ui-avatars.com/api/?name=Doctor";
-                      }}
-                    />
-                    <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-white" />
-                  </div>
+                  <Image
+                    src={getAvatar(doctor)}
+                    alt={doctor.name}
+                    width={48}
+                    height={48}
+                    className="size-12 rounded-full object-cover ring-2 ring-primary/20"
+                    unoptimized
+                  />
 
                   <div>
                     <div className="font-semibold">{doctor.name}</div>
