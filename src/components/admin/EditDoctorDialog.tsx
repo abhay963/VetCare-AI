@@ -1,7 +1,10 @@
+"use client";
+
 import { useUpdateDoctor } from "@/hooks/use-doctors";
 import { formatPhoneNumber } from "@/lib/utils";
 import { Doctor, Gender } from "@prisma/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 import {
   Dialog,
   DialogContent,
@@ -12,30 +15,53 @@ import {
 } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { Button } from "../ui/button";
+
+/* ✅ FIX: extended type */
+type DoctorWithOptionalCount = Doctor & {
+  appointmentCount?: number;
+};
 
 interface EditDoctorDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  doctor: Doctor | null;
+  doctor: DoctorWithOptionalCount | null;
 }
 
-function EditDoctorDialog({ doctor, isOpen, onClose }: EditDoctorDialogProps) {
-  const [editingDoctor, setEditingDoctor] = useState<Doctor | null>(doctor);
+function EditDoctorDialog({
+  doctor,
+  isOpen,
+  onClose,
+}: EditDoctorDialogProps) {
+  const [editingDoctor, setEditingDoctor] =
+    useState<DoctorWithOptionalCount | null>(doctor);
 
   const updateDoctorMutation = useUpdateDoctor();
 
+  /* ✅ IMPORTANT: sync state when dialog opens */
+  useEffect(() => {
+    setEditingDoctor(doctor);
+  }, [doctor]);
+
   const handlePhoneChange = (value: string) => {
-    const formattedPhoneNumber = formatPhoneNumber(value);
+    const formatted = formatPhoneNumber(value);
     if (editingDoctor) {
-      setEditingDoctor({ ...editingDoctor, phone: formattedPhoneNumber });
+      setEditingDoctor({ ...editingDoctor, phone: formatted });
     }
   };
 
   const handleSave = () => {
     if (editingDoctor) {
-      updateDoctorMutation.mutate({ ...editingDoctor }, { onSuccess: handleClose });
+      updateDoctorMutation.mutate(editingDoctor, {
+        onSuccess: handleClose,
+      });
     }
   };
 
@@ -49,81 +75,101 @@ function EditDoctorDialog({ doctor, isOpen, onClose }: EditDoctorDialogProps) {
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Edit Doctor</DialogTitle>
-          <DialogDescription>Update doctor information and status.</DialogDescription>
+          <DialogDescription>
+            Update doctor information and status.
+          </DialogDescription>
         </DialogHeader>
 
         {editingDoctor && (
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
+                <Label>Name</Label>
                 <Input
-                  id="name"
                   value={editingDoctor.name}
-                  onChange={(e) => setEditingDoctor({ ...editingDoctor, name: e.target.value })}
+                  onChange={(e) =>
+                    setEditingDoctor({
+                      ...editingDoctor,
+                      name: e.target.value,
+                    })
+                  }
                 />
               </div>
+
               <div className="space-y-2">
-                <Label htmlFor="speciality">Speciality</Label>
+                <Label>Speciality</Label>
                 <Input
-                  id="speciality"
                   value={editingDoctor.speciality}
                   onChange={(e) =>
-                    setEditingDoctor({ ...editingDoctor, speciality: e.target.value })
+                    setEditingDoctor({
+                      ...editingDoctor,
+                      speciality: e.target.value,
+                    })
                   }
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label>Email</Label>
               <Input
-                id="email"
                 type="email"
                 value={editingDoctor.email}
-                onChange={(e) => setEditingDoctor({ ...editingDoctor, email: e.target.value })}
+                onChange={(e) =>
+                  setEditingDoctor({
+                    ...editingDoctor,
+                    email: e.target.value,
+                  })
+                }
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone</Label>
+              <Label>Phone</Label>
               <Input
-                id="phone"
                 value={editingDoctor.phone}
                 onChange={(e) => handlePhoneChange(e.target.value)}
-                placeholder="(555) 123-4567"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="gender">Gender</Label>
+                <Label>Gender</Label>
                 <Select
-                  value={editingDoctor.gender || ""}
+                  value={editingDoctor.gender}
                   onValueChange={(value) =>
-                    setEditingDoctor({ ...editingDoctor, gender: value as Gender })
+                    setEditingDoctor({
+                      ...editingDoctor,
+                      gender: value as Gender,
+                    })
                   }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
+
                   <SelectContent>
                     <SelectItem value="MALE">Male</SelectItem>
                     <SelectItem value="FEMALE">Female</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
+
               <div className="space-y-2">
-                <Label htmlFor="status">Status</Label>
+                <Label>Status</Label>
                 <Select
                   value={editingDoctor.isActive ? "active" : "inactive"}
                   onValueChange={(value) =>
-                    setEditingDoctor({ ...editingDoctor, isActive: value === "active" })
+                    setEditingDoctor({
+                      ...editingDoctor,
+                      isActive: value === "active",
+                    })
                   }
                 >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
+
                   <SelectContent>
                     <SelectItem value="active">Active</SelectItem>
                     <SelectItem value="inactive">Inactive</SelectItem>
@@ -138,9 +184,9 @@ function EditDoctorDialog({ doctor, isOpen, onClose }: EditDoctorDialogProps) {
           <Button variant="outline" onClick={handleClose}>
             Cancel
           </Button>
+
           <Button
             onClick={handleSave}
-            className="bg-primary hover:bg-primary/90"
             disabled={updateDoctorMutation.isPending}
           >
             {updateDoctorMutation.isPending ? "Saving..." : "Save Changes"}
