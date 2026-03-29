@@ -13,8 +13,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../ui/dialog";
+
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+
 import {
   Select,
   SelectContent,
@@ -22,9 +24,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+
 import { Button } from "../ui/button";
 
-/* ✅ FIX: extended type */
+/* ✅ FINAL TYPE (matches DoctorsManagement) */
 type DoctorWithOptionalCount = Doctor & {
   appointmentCount?: number;
 };
@@ -40,31 +43,39 @@ function EditDoctorDialog({
   isOpen,
   onClose,
 }: EditDoctorDialogProps) {
+  /* ✅ SAFE STATE INIT */
   const [editingDoctor, setEditingDoctor] =
-    useState<DoctorWithOptionalCount | null>(doctor);
+    useState<DoctorWithOptionalCount | null>(null);
 
   const updateDoctorMutation = useUpdateDoctor();
 
-  /* ✅ IMPORTANT: sync state when dialog opens */
+  /* ✅ Sync doctor when dialog opens */
   useEffect(() => {
     setEditingDoctor(doctor);
   }, [doctor]);
 
+  /* ✅ Phone formatter */
   const handlePhoneChange = (value: string) => {
+    if (!editingDoctor) return;
+
     const formatted = formatPhoneNumber(value);
-    if (editingDoctor) {
-      setEditingDoctor({ ...editingDoctor, phone: formatted });
-    }
+
+    setEditingDoctor({
+      ...editingDoctor,
+      phone: formatted,
+    });
   };
 
+  /* ✅ Save handler */
   const handleSave = () => {
-    if (editingDoctor) {
-      updateDoctorMutation.mutate(editingDoctor, {
-        onSuccess: handleClose,
-      });
-    }
+    if (!editingDoctor) return;
+
+    updateDoctorMutation.mutate(editingDoctor, {
+      onSuccess: handleClose,
+    });
   };
 
+  /* ✅ Close handler */
   const handleClose = () => {
     onClose();
     setEditingDoctor(null);
@@ -82,6 +93,7 @@ function EditDoctorDialog({
 
         {editingDoctor && (
           <div className="grid gap-4 py-4">
+            {/* NAME + SPECIALITY */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Name</Label>
@@ -110,6 +122,7 @@ function EditDoctorDialog({
               </div>
             </div>
 
+            {/* EMAIL */}
             <div className="space-y-2">
               <Label>Email</Label>
               <Input
@@ -124,17 +137,22 @@ function EditDoctorDialog({
               />
             </div>
 
+            {/* PHONE */}
             <div className="space-y-2">
               <Label>Phone</Label>
               <Input
                 value={editingDoctor.phone}
-                onChange={(e) => handlePhoneChange(e.target.value)}
+                onChange={(e) =>
+                  handlePhoneChange(e.target.value)
+                }
               />
             </div>
 
+            {/* GENDER + STATUS */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Gender</Label>
+
                 <Select
                   value={editingDoctor.gender}
                   onValueChange={(value) =>
@@ -149,16 +167,25 @@ function EditDoctorDialog({
                   </SelectTrigger>
 
                   <SelectContent>
-                    <SelectItem value="MALE">Male</SelectItem>
-                    <SelectItem value="FEMALE">Female</SelectItem>
+                    <SelectItem value="MALE">
+                      Male
+                    </SelectItem>
+                    <SelectItem value="FEMALE">
+                      Female
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
                 <Label>Status</Label>
+
                 <Select
-                  value={editingDoctor.isActive ? "active" : "inactive"}
+                  value={
+                    editingDoctor.isActive
+                      ? "active"
+                      : "inactive"
+                  }
                   onValueChange={(value) =>
                     setEditingDoctor({
                       ...editingDoctor,
@@ -171,8 +198,12 @@ function EditDoctorDialog({
                   </SelectTrigger>
 
                   <SelectContent>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="inactive">Inactive</SelectItem>
+                    <SelectItem value="active">
+                      Active
+                    </SelectItem>
+                    <SelectItem value="inactive">
+                      Inactive
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -180,6 +211,7 @@ function EditDoctorDialog({
           </div>
         )}
 
+        {/* FOOTER */}
         <DialogFooter>
           <Button variant="outline" onClick={handleClose}>
             Cancel
@@ -187,9 +219,14 @@ function EditDoctorDialog({
 
           <Button
             onClick={handleSave}
-            disabled={updateDoctorMutation.isPending}
+            disabled={
+              updateDoctorMutation.isPending ||
+              !editingDoctor
+            }
           >
-            {updateDoctorMutation.isPending ? "Saving..." : "Save Changes"}
+            {updateDoctorMutation.isPending
+              ? "Saving..."
+              : "Save Changes"}
           </Button>
         </DialogFooter>
       </DialogContent>

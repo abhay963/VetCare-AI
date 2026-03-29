@@ -2,6 +2,7 @@
 
 import { useGetDoctors } from "@/hooks/use-doctors";
 import { useState } from "react";
+
 import {
   Card,
   CardContent,
@@ -9,16 +10,17 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
+
 import {
   EditIcon,
-  MailIcon,
-  PhoneIcon,
   PlusIcon,
   StethoscopeIcon,
 } from "lucide-react";
+
 import { Button } from "../ui/button";
 import Image from "next/image";
 import { Badge } from "../ui/badge";
+
 import AddDoctorDialog from "./AddDoctorDialog";
 import EditDoctorDialog from "./EditDoctorDialog";
 
@@ -27,11 +29,9 @@ import { adventurer } from "@dicebear/collection";
 
 import { Doctor } from "@prisma/client";
 
-/* ✅ FINAL FIXED TYPE */
+/* ✅ FINAL TYPE */
 type DoctorWithCount = Doctor & {
-  appointmentCount: number;
-  createdAt: Date;
-  updatedAt: Date;
+  appointmentCount?: number;
 };
 
 function DoctorsManagement() {
@@ -43,16 +43,19 @@ function DoctorsManagement() {
   const [selectedDoctor, setSelectedDoctor] =
     useState<DoctorWithCount | null>(null);
 
+  /* ✅ Open edit dialog */
   const handleEditDoctor = (doctor: DoctorWithCount) => {
     setSelectedDoctor(doctor);
     setIsEditDialogOpen(true);
   };
 
+  /* ✅ Close edit dialog */
   const handleCloseEditDialog = () => {
     setIsEditDialogOpen(false);
     setSelectedDoctor(null);
   };
 
+  /* ✅ Avatar generator */
   const getAvatar = (doctor: DoctorWithCount) => {
     if (
       doctor.imageUrl &&
@@ -73,6 +76,7 @@ function DoctorsManagement() {
 
   return (
     <>
+      {/* ================= CARD ================= */}
       <Card className="mb-12 shadow-md border border-border/50">
         <CardHeader className="flex items-center justify-between">
           <div>
@@ -80,6 +84,7 @@ function DoctorsManagement() {
               <StethoscopeIcon className="size-5 text-primary" />
               Veterinary Doctors
             </CardTitle>
+
             <CardDescription>
               Manage and oversee all veterinary doctors
             </CardDescription>
@@ -96,8 +101,9 @@ function DoctorsManagement() {
             {(doctors as DoctorWithCount[]).map((doctor) => (
               <div
                 key={doctor.id}
-                className="flex items-center justify-between p-4 rounded-xl border hover:shadow-md"
+                className="flex items-center justify-between p-4 rounded-xl border hover:shadow-md transition"
               >
+                {/* LEFT SIDE */}
                 <div className="flex items-center gap-4">
                   <Image
                     src={getAvatar(doctor)}
@@ -109,7 +115,9 @@ function DoctorsManagement() {
                   />
 
                   <div>
-                    <div className="font-semibold">{doctor.name}</div>
+                    <div className="font-semibold">
+                      {doctor.name}
+                    </div>
 
                     <div className="text-sm text-muted-foreground">
                       {doctor.speciality}
@@ -121,7 +129,9 @@ function DoctorsManagement() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3">
+                {/* RIGHT SIDE */}
+                <div className="flex items-center gap-4">
+                  {/* Appointments */}
                   <div className="text-center">
                     <div className="font-semibold text-primary">
                       {doctor.appointmentCount ?? 0}
@@ -131,13 +141,20 @@ function DoctorsManagement() {
                     </div>
                   </div>
 
+                  {/* Status */}
                   {doctor.isActive ? (
                     <Badge>Active</Badge>
                   ) : (
-                    <Badge variant="secondary">Inactive</Badge>
+                    <Badge variant="secondary">
+                      Inactive
+                    </Badge>
                   )}
 
-                  <Button onClick={() => handleEditDoctor(doctor)}>
+                  {/* Edit Button */}
+                  <Button
+                    variant="outline"
+                    onClick={() => handleEditDoctor(doctor)}
+                  >
                     <EditIcon className="size-4 mr-1" />
                     Edit
                   </Button>
@@ -148,33 +165,17 @@ function DoctorsManagement() {
         </CardContent>
       </Card>
 
+      {/* ================= ADD ================= */}
       <AddDoctorDialog
         isOpen={isAddDialogOpen}
         onClose={() => setIsAddDialogOpen(false)}
       />
 
-      {/* ✅ FINAL FIX */}
+      {/* ================= EDIT ================= */}
       <EditDoctorDialog
-        key={selectedDoctor?.id}
         isOpen={isEditDialogOpen}
         onClose={handleCloseEditDialog}
-        doctor={
-          selectedDoctor
-            ? {
-                id: selectedDoctor.id,
-                name: selectedDoctor.name,
-                email: selectedDoctor.email,
-                phone: selectedDoctor.phone,
-                speciality: selectedDoctor.speciality,
-                bio: selectedDoctor.bio,
-                imageUrl: selectedDoctor.imageUrl,
-                gender: selectedDoctor.gender,
-                isActive: selectedDoctor.isActive,
-                createdAt: selectedDoctor.createdAt,
-                updatedAt: selectedDoctor.updatedAt,
-              }
-            : null
-        }
+        doctor={selectedDoctor}  // ✅ DIRECT PASS (NO TYPE ERROR)
       />
     </>
   );
