@@ -1,3 +1,5 @@
+"use client";
+
 import { useCreateDoctor } from "@/hooks/use-doctors";
 import { Gender } from "@prisma/client";
 import { useState } from "react";
@@ -11,9 +13,14 @@ import {
 } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { Button } from "../ui/button";
-import { formatPhoneNumber } from "@/lib/utils";
 
 interface AddDoctorDialogProps {
   isOpen: boolean;
@@ -30,15 +37,40 @@ function AddDoctorDialog({ isOpen, onClose }: AddDoctorDialogProps) {
     isActive: true,
   });
 
+  const [phoneError, setPhoneError] = useState("");
+
   const createDoctorMutation = useCreateDoctor();
 
+  // 🇮🇳 Indian phone validation
   const handlePhoneChange = (value: string) => {
-    const formattedPhoneNumber = formatPhoneNumber(value);
-    setNewDoctor({ ...newDoctor, phone: formattedPhoneNumber });
+    // allow only numbers
+    const cleaned = value.replace(/\D/g, "");
+
+    // max 10 digits
+    if (cleaned.length <= 10) {
+      setNewDoctor({ ...newDoctor, phone: cleaned });
+
+      if (cleaned.length === 10) {
+        setPhoneError("");
+      } else {
+        setPhoneError("Enter valid 10-digit Indian number");
+      }
+    }
   };
 
   const handleSave = () => {
-    createDoctorMutation.mutate({ ...newDoctor }, { onSuccess: handleClose });
+    if (newDoctor.phone.length !== 10) {
+      setPhoneError("Enter valid 10-digit Indian number");
+      return;
+    }
+
+    createDoctorMutation.mutate(
+      {
+        ...newDoctor,
+        phone: `+91${newDoctor.phone}`, // store with country code
+      },
+      { onSuccess: handleClose }
+    );
   };
 
   const handleClose = () => {
@@ -51,67 +83,88 @@ function AddDoctorDialog({ isOpen, onClose }: AddDoctorDialogProps) {
       gender: "MALE",
       isActive: true,
     });
+    setPhoneError("");
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Add New Doctor</DialogTitle>
-          <DialogDescription>Add a new doctor to your practice.</DialogDescription>
+          <DialogTitle>🐾 Add Veterinary Doctor</DialogTitle>
+          <DialogDescription>
+            Add a new veterinary doctor to Vet Care AI platform.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="new-name">Name *</Label>
+              <Label>Name *</Label>
               <Input
-                id="new-name"
                 value={newDoctor.name}
-                onChange={(e) => setNewDoctor({ ...newDoctor, name: e.target.value })}
-                placeholder="Dr. John Smith"
+                onChange={(e) =>
+                  setNewDoctor({ ...newDoctor, name: e.target.value })
+                }
+                placeholder="Dr. Sharma"
               />
             </div>
+
             <div className="space-y-2">
-              <Label htmlFor="new-speciality">Speciality *</Label>
+              <Label>Speciality *</Label>
               <Input
-                id="new-speciality"
                 value={newDoctor.speciality}
-                onChange={(e) => setNewDoctor({ ...newDoctor, speciality: e.target.value })}
-                placeholder="General Dentistry"
+                onChange={(e) =>
+                  setNewDoctor({
+                    ...newDoctor,
+                    speciality: e.target.value,
+                  })
+                }
+                placeholder="Veterinary Surgeon"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="new-email">Email *</Label>
+            <Label>Email *</Label>
             <Input
-              id="new-email"
               type="email"
               value={newDoctor.email}
-              onChange={(e) => setNewDoctor({ ...newDoctor, email: e.target.value })}
-              placeholder="doctor@example.com"
+              onChange={(e) =>
+                setNewDoctor({ ...newDoctor, email: e.target.value })
+              }
+              placeholder="doctor@vetcare.ai"
             />
           </div>
+
           <div className="space-y-2">
-            <Label htmlFor="new-phone">Phone</Label>
-            <Input
-              id="new-phone"
-              value={newDoctor.phone}
-              onChange={(e) => handlePhoneChange(e.target.value)}
-              placeholder="(555) 123-4567"
-            />
+            <Label>Phone (India)</Label>
+            <div className="flex items-center gap-2">
+              <span className="px-3 py-2 bg-muted rounded-md text-sm">
+                +91
+              </span>
+              <Input
+                value={newDoctor.phone}
+                onChange={(e) => handlePhoneChange(e.target.value)}
+                placeholder="9876543210"
+              />
+            </div>
+
+            {phoneError && (
+              <p className="text-sm text-red-500">{phoneError}</p>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="new-gender">Gender</Label>
+              <Label>Gender</Label>
               <Select
-                value={newDoctor.gender || ""}
-                onValueChange={(value) => setNewDoctor({ ...newDoctor, gender: value as Gender })}
+                value={newDoctor.gender}
+                onValueChange={(value) =>
+                  setNewDoctor({ ...newDoctor, gender: value as Gender })
+                }
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select gender" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="MALE">Male</SelectItem>
@@ -121,11 +174,14 @@ function AddDoctorDialog({ isOpen, onClose }: AddDoctorDialogProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="new-status">Status</Label>
+              <Label>Status</Label>
               <Select
                 value={newDoctor.isActive ? "active" : "inactive"}
                 onValueChange={(value) =>
-                  setNewDoctor({ ...newDoctor, isActive: value === "active" })
+                  setNewDoctor({
+                    ...newDoctor,
+                    isActive: value === "active",
+                  })
                 }
               >
                 <SelectTrigger>
@@ -147,11 +203,11 @@ function AddDoctorDialog({ isOpen, onClose }: AddDoctorDialogProps) {
 
           <Button
             onClick={handleSave}
-            className="bg-primary hover:bg-primary/90"
             disabled={
               !newDoctor.name ||
               !newDoctor.email ||
               !newDoctor.speciality ||
+              newDoctor.phone.length !== 10 ||
               createDoctorMutation.isPending
             }
           >

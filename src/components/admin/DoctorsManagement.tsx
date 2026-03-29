@@ -8,7 +8,8 @@ import { Badge } from "../ui/badge";
 import AddDoctorDialog from "./AddDoctorDialog";
 import EditDoctorDialog from "./EditDoctorDialog";
 import { Doctor } from "@prisma/client";
-
+import { createAvatar } from "@dicebear/core";
+import { adventurer, avataaars } from "@dicebear/collection";
 function DoctorsManagement() {
   const { data: doctors = [] } = useGetDoctors();
 
@@ -26,21 +27,49 @@ function DoctorsManagement() {
     setSelectedDoctor(null);
   };
 
+ 
+
+
+
+const getAvatar = (doctor: Doctor) => {
+  if (
+    doctor.imageUrl &&
+    doctor.imageUrl.startsWith("http") &&
+    !doctor.imageUrl.includes("avatar.iran.liara.run")
+  ) {
+    return doctor.imageUrl;
+  }
+
+  const seed = doctor.name || "Doctor";
+
+  const style = doctor.gender === "MALE" ? adventurer : avataaars;
+
+  const avatar = createAvatar(style, {
+    seed,
+    size: 128,
+    radius: 50, // circle avatar
+  });
+
+  return avatar.toDataUri(); // ✅ NO API CALL
+};
+
   return (
     <>
-      <Card className="mb-12">
+      <Card className="mb-12 shadow-lg border border-border/40">
         <CardHeader className="flex items-center justify-between">
           <div>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-lg">
               <StethoscopeIcon className="size-5 text-primary" />
-              Doctors Management
+              Veterinary Doctors
             </CardTitle>
-            <CardDescription>Manage and oversee all doctors in your practice</CardDescription>
+            <CardDescription>
+              Manage and oversee all veterinary doctors in Vet Care AI
+            </CardDescription>
           </div>
 
           <Button
             onClick={() => setIsAddDialogOpen(true)}
-            className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/100"
+            className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/100 shadow-md"
           >
             <PlusIcon className="mr-2 size-4" />
             Add Doctor
@@ -52,16 +81,24 @@ function DoctorsManagement() {
             {doctors.map((doctor) => (
               <div
                 key={doctor.id}
-                className="flex items-center justify-between p-4 bg-muted/30 rounded-xl border border-border/50"
+                className="flex items-center justify-between p-4 bg-muted/30 rounded-xl border border-border/50 hover:shadow-md transition-all duration-200"
               >
                 <div className="flex items-center gap-4">
-                  <Image
-                    src={doctor.imageUrl}
-                    alt={doctor.name}
-                    width={48}
-                    height={48}
-                    className="size-12 rounded-full object-cover ring-2 ring-background"
-                  />
+                  <div className="relative">
+                    <Image
+                      src={getAvatar(doctor)}
+                      alt={doctor.name}
+                      width={48}
+                      height={48}
+                      className="size-12 rounded-full object-cover ring-2 ring-primary/20"
+                      onError={(e) => {
+                        // ✅ FINAL FALLBACK (never breaks)
+                        (e.target as HTMLImageElement).src =
+                          "https://ui-avatars.com/api/?name=Doctor";
+                      }}
+                    />
+                    <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-white" />
+                  </div>
 
                   <div>
                     <div className="font-semibold">{doctor.name}</div>
@@ -73,7 +110,7 @@ function DoctorsManagement() {
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-4 mt-1">
+                    <div className="flex items-center gap-4 mt-1 flex-wrap">
                       <div className="flex items-center gap-1 text-xs text-muted-foreground">
                         <MailIcon className="h-3 w-3" />
                         {doctor.email}
@@ -88,19 +125,26 @@ function DoctorsManagement() {
 
                 <div className="flex items-center gap-3">
                   <div className="text-center">
-                    <div className="font-semibold text-primary">{doctor.appointmentCount}</div>
-                    <div className="text-xs text-muted-foreground">Appointments</div>
+                    <div className="font-semibold text-primary">
+                      {doctor.appointmentCount}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      Appointments
+                    </div>
                   </div>
 
                   {doctor.isActive ? (
-                    <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Active</Badge>
+                    <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
+                      Active
+                    </Badge>
                   ) : (
                     <Badge variant="secondary">Inactive</Badge>
                   )}
+
                   <Button
                     size="sm"
                     variant="outline"
-                    className="h-8 px-3"
+                    className="h-8 px-3 hover:bg-primary/10"
                     onClick={() => handleEditDoctor(doctor)}
                   >
                     <EditIcon className="size-4 mr-1" />
@@ -113,10 +157,13 @@ function DoctorsManagement() {
         </CardContent>
       </Card>
 
-      <AddDoctorDialog isOpen={isAddDialogOpen} onClose={() => setIsAddDialogOpen(false)} />
+      <AddDoctorDialog
+        isOpen={isAddDialogOpen}
+        onClose={() => setIsAddDialogOpen(false)}
+      />
 
       <EditDoctorDialog
-        key={selectedDoctor?.id} // advanced react
+        key={selectedDoctor?.id}
         isOpen={isEditDialogOpen}
         onClose={handleCloseEditDialog}
         doctor={selectedDoctor}
@@ -124,4 +171,5 @@ function DoctorsManagement() {
     </>
   );
 }
+
 export default DoctorsManagement;
