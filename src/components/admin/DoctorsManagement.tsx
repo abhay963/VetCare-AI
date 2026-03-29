@@ -22,21 +22,13 @@ import { Badge } from "../ui/badge";
 import AddDoctorDialog from "./AddDoctorDialog";
 import EditDoctorDialog from "./EditDoctorDialog";
 
-// ✅ FIX: Use ONLY adventurer (no avataaars)
 import { createAvatar } from "@dicebear/core";
 import { adventurer } from "@dicebear/collection";
 
-/* ✅ TYPE */
-type DoctorWithCount = {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  speciality: string;
-  bio: string | null;
-  imageUrl: string;
-  gender: "MALE" | "FEMALE";
-  isActive: boolean;
+// ✅ FIX: extend Prisma type
+import { Doctor } from "@prisma/client";
+
+type DoctorWithCount = Doctor & {
   appointmentCount: number;
 };
 
@@ -45,6 +37,8 @@ function DoctorsManagement() {
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
+  // ✅ FIXED TYPE
   const [selectedDoctor, setSelectedDoctor] =
     useState<DoctorWithCount | null>(null);
 
@@ -58,7 +52,6 @@ function DoctorsManagement() {
     setSelectedDoctor(null);
   };
 
-  // ✅ FIXED AVATAR FUNCTION
   const getAvatar = (doctor: DoctorWithCount) => {
     if (
       doctor.imageUrl &&
@@ -95,7 +88,7 @@ function DoctorsManagement() {
 
           <Button
             onClick={() => setIsAddDialogOpen(true)}
-            className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/100 shadow-sm"
+            className="bg-gradient-to-r from-primary to-primary/80"
           >
             <PlusIcon className="mr-2 size-4" />
             Add Doctor
@@ -107,7 +100,7 @@ function DoctorsManagement() {
             {(doctors as DoctorWithCount[]).map((doctor) => (
               <div
                 key={doctor.id}
-                className="flex items-center justify-between p-4 bg-muted/30 rounded-xl border border-border/50 hover:shadow-md transition-all"
+                className="flex items-center justify-between p-4 rounded-xl border hover:shadow-md transition-all"
               >
                 <div className="flex items-center gap-4">
                   <Image
@@ -115,7 +108,7 @@ function DoctorsManagement() {
                     alt={doctor.name}
                     width={48}
                     height={48}
-                    className="size-12 rounded-full object-cover ring-2 ring-primary/20"
+                    className="size-12 rounded-full object-cover"
                     unoptimized
                   />
 
@@ -124,27 +117,17 @@ function DoctorsManagement() {
 
                     <div className="text-sm text-muted-foreground">
                       {doctor.speciality}
-
-                      <span className="ml-2 px-2 py-0.5 bg-muted rounded text-xs">
-                        {doctor.gender === "MALE" ? "Male" : "Female"}
-                      </span>
                     </div>
 
-                    <div className="flex items-center gap-4 mt-1 flex-wrap">
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <MailIcon className="h-3 w-3" />
-                        {doctor.email}
-                      </div>
-
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <PhoneIcon className="h-3 w-3" />
-                        {doctor.phone}
-                      </div>
+                    <div className="flex gap-4 mt-1 text-xs text-muted-foreground">
+                      <span>{doctor.email}</span>
+                      <span>{doctor.phone}</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
+                  {/* ✅ FIXED */}
                   <div className="text-center">
                     <div className="font-semibold text-primary">
                       {doctor.appointmentCount ?? 0}
@@ -155,9 +138,7 @@ function DoctorsManagement() {
                   </div>
 
                   {doctor.isActive ? (
-                    <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
-                      Active
-                    </Badge>
+                    <Badge>Active</Badge>
                   ) : (
                     <Badge variant="secondary">Inactive</Badge>
                   )}
@@ -165,7 +146,6 @@ function DoctorsManagement() {
                   <Button
                     size="sm"
                     variant="outline"
-                    className="h-8 px-3 hover:bg-primary/10"
                     onClick={() => handleEditDoctor(doctor)}
                   >
                     <EditIcon className="size-4 mr-1" />
@@ -183,11 +163,12 @@ function DoctorsManagement() {
         onClose={() => setIsAddDialogOpen(false)}
       />
 
+      {/* ✅ FIX: cast back to Prisma Doctor */}
       <EditDoctorDialog
         key={selectedDoctor?.id}
         isOpen={isEditDialogOpen}
         onClose={handleCloseEditDialog}
-        doctor={selectedDoctor}
+        doctor={selectedDoctor as Doctor}
       />
     </>
   );
