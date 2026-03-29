@@ -1,10 +1,29 @@
+"use client";
+
 import { useAvailableDoctors } from "@/hooks/use-doctors";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 import Image from "next/image";
 import { MapPinIcon, PhoneIcon, StarIcon } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { DoctorCardsLoading } from "./DoctorCardsLoading";
+
+// ✅ ADD THIS TYPE
+interface Dentist {
+  id: string;
+  name: string;
+  imageUrl: string;
+  speciality: string;
+  phone: string;
+  bio: string | null;
+  appointmentCount: number; // ✅ important
+}
 
 interface DoctorSelectionStepProps {
   selectedDentistId: string | null;
@@ -19,20 +38,21 @@ function DoctorSelectionStep({
 }: DoctorSelectionStepProps) {
   const { data: dentists = [], isLoading } = useAvailableDoctors();
 
-  if (isLoading)
+  if (isLoading) {
     return (
       <div className="space-y-6">
         <h2 className="text-2xl font-semibold">Choose Your Dentist</h2>
         <DoctorCardsLoading />
       </div>
     );
+  }
 
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-semibold">Choose Your Dentist</h2>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {dentists.map((dentist) => (
+        {(dentists as Dentist[]).map((dentist) => (
           <Card
             key={dentist.id}
             className={`cursor-pointer transition-all hover:shadow-lg ${
@@ -43,24 +63,31 @@ function DoctorSelectionStep({
             <CardHeader className="pb-4">
               <div className="flex items-start gap-4">
                 <Image
-                  src={dentist.imageUrl!}
-                  alt={dentist.name}
+                  src={dentist.imageUrl || "/default-avatar.png"}
+                  alt={dentist.name || "Doctor"}
                   width={64}
                   height={64}
                   className="w-16 h-16 rounded-full object-cover"
                 />
+
                 <div className="flex-1">
-                  <CardTitle className="text-lg">{dentist.name}</CardTitle>
+                  <CardTitle className="text-lg">
+                    {dentist.name}
+                  </CardTitle>
+
                   <CardDescription className="text-primary font-medium">
                     {dentist.speciality || "General Dentistry"}
                   </CardDescription>
+
                   <div className="flex items-center gap-2 mt-2">
                     <div className="flex items-center gap-1">
                       <StarIcon className="w-4 h-4 fill-amber-400 text-amber-400" />
                       <span className="text-sm font-medium">5</span>
                     </div>
+
+                    {/* ✅ NO ERROR NOW */}
                     <span className="text-sm text-muted-foreground">
-                      ({dentist.appointmentCount} appointments)
+                      ({dentist.appointmentCount ?? 0} appointments)
                     </span>
                   </div>
                 </div>
@@ -72,13 +99,17 @@ function DoctorSelectionStep({
                 <MapPinIcon className="w-4 h-4" />
                 <span>DentWise</span>
               </div>
+
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <PhoneIcon className="w-4 h-4" />
-                <span>{dentist.phone}</span>
+                <span>{dentist.phone || "Not Available"}</span>
               </div>
+
               <p className="text-sm text-muted-foreground">
-                {dentist.bio || "Experienced dental professional providing quality care."}
+                {dentist.bio ||
+                  "Experienced dental professional providing quality care."}
               </p>
+
               <Badge variant="secondary">Licensed Professional</Badge>
             </CardContent>
           </Card>
@@ -87,10 +118,13 @@ function DoctorSelectionStep({
 
       {selectedDentistId && (
         <div className="flex justify-end">
-          <Button onClick={onContinue}>Continue to Time Selection</Button>
+          <Button onClick={onContinue}>
+            Continue to Time Selection
+          </Button>
         </div>
       )}
     </div>
   );
 }
+
 export default DoctorSelectionStep;
