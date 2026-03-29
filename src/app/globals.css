@@ -192,3 +192,26 @@
     cursor: pointer;
   }
 }
+
+.goog-te-banner-frame {
+  display: none !important;
+}
+
+body {
+  top: 0px !important;
+}
+
+.btn-lang {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: white;
+  font-size: 13px;
+  transition: 0.2s;
+}
+
+.btn-lang:hover {
+  background: #27272a;
+}
