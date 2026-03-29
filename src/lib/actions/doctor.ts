@@ -5,7 +5,7 @@ import { prisma } from "../prisma";
 import { generateAvatar } from "../utils";
 import { revalidatePath } from "next/cache";
 
-// ✅ GET ALL DOCTORS (ADMIN)
+/* ================= GET ALL DOCTORS ================= */
 export async function getDoctors() {
   try {
     const doctors = await prisma.doctor.findMany({
@@ -25,6 +25,8 @@ export async function getDoctors() {
   }
 }
 
+/* ================= CREATE DOCTOR ================= */
+
 interface CreateDoctorInput {
   name: string;
   email: string;
@@ -34,11 +36,11 @@ interface CreateDoctorInput {
   isActive: boolean;
 }
 
-// ✅ CREATE DOCTOR
 export async function createDoctor(input: CreateDoctorInput) {
   try {
-    if (!input.name || !input.email)
+    if (!input.name || !input.email) {
       throw new Error("Name and email are required");
+    }
 
     const doctor = await prisma.doctor.create({
       data: {
@@ -48,6 +50,7 @@ export async function createDoctor(input: CreateDoctorInput) {
     });
 
     revalidatePath("/admin");
+
     return doctor;
   } catch (error: any) {
     console.error("Error creating doctor:", error);
@@ -60,15 +63,15 @@ export async function createDoctor(input: CreateDoctorInput) {
   }
 }
 
+/* ================= UPDATE DOCTOR ================= */
+
 interface UpdateDoctorInput extends Partial<CreateDoctorInput> {
   id: string;
 }
 
-// ✅ UPDATE DOCTOR
 export async function updateDoctor(input: UpdateDoctorInput) {
   try {
-    if (!input.name || !input.email)
-      throw new Error("Name and email are required");
+    if (!input.id) throw new Error("Doctor ID is required");
 
     const currentDoctor = await prisma.doctor.findUnique({
       where: { id: input.id },
@@ -77,9 +80,10 @@ export async function updateDoctor(input: UpdateDoctorInput) {
 
     if (!currentDoctor) throw new Error("Doctor not found");
 
-    if (input.email !== currentDoctor.email) {
+    /* ✅ EMAIL UNIQUE CHECK */
+    if (input.email && input.email !== currentDoctor.email) {
       const existingDoctor = await prisma.doctor.findUnique({
-        where: { email: input.email },
+        where: { email: input.email }, // ✅ NOW WORKS
       });
 
       if (existingDoctor) {
@@ -99,6 +103,8 @@ export async function updateDoctor(input: UpdateDoctorInput) {
       },
     });
 
+    revalidatePath("/admin");
+
     return doctor;
   } catch (error) {
     console.error("Error updating doctor:", error);
@@ -106,7 +112,8 @@ export async function updateDoctor(input: UpdateDoctorInput) {
   }
 }
 
-// ✅ 🔥 FIXED FUNCTION (MOST IMPORTANT)
+/* ================= AVAILABLE DOCTORS ================= */
+
 export async function getAvailableDoctors() {
   try {
     const doctors = await prisma.doctor.findMany({
@@ -123,7 +130,6 @@ export async function getAvailableDoctors() {
       orderBy: { createdAt: "desc" },
     });
 
-    // ✅ Add appointmentCount here
     return doctors.map((doctor) => ({
       ...doctor,
       appointmentCount: doctor._count.appointments,
