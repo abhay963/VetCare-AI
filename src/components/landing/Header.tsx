@@ -42,7 +42,7 @@ function Header() {
             Pricing
           </Link>
 
-          <Link href="#" className="nav-link">
+          <Link href="hospital" className="nav-link">
             Nearby Hospital
           </Link>
 

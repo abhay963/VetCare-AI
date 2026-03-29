@@ -13,8 +13,8 @@ import { MapPinIcon, PhoneIcon, StarIcon } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { DoctorCardsLoading } from "./DoctorCardsLoading";
+import { useState } from "react";
 
-// ✅ ADD THIS TYPE
 interface Dentist {
   id: string;
   name: string;
@@ -22,7 +22,7 @@ interface Dentist {
   speciality: string;
   phone: string;
   bio: string | null;
-  appointmentCount: number; // ✅ important
+  appointmentCount: number;
 }
 
 interface DoctorSelectionStepProps {
@@ -62,13 +62,9 @@ function DoctorSelectionStep({
           >
             <CardHeader className="pb-4">
               <div className="flex items-start gap-4">
-                <Image
-                  src={dentist.imageUrl || "/default-avatar.png"}
-                  alt={dentist.name || "Doctor"}
-                  width={64}
-                  height={64}
-                  className="w-16 h-16 rounded-full object-cover"
-                />
+
+                {/* 🔥 AVATAR */}
+                <Avatar name={dentist.name} imageUrl={dentist.imageUrl} />
 
                 <div className="flex-1">
                   <CardTitle className="text-lg">
@@ -76,7 +72,7 @@ function DoctorSelectionStep({
                   </CardTitle>
 
                   <CardDescription className="text-primary font-medium">
-                    {dentist.speciality || "General Dentistry"}
+                    {dentist.speciality || "General Vet"}
                   </CardDescription>
 
                   <div className="flex items-center gap-2 mt-2">
@@ -85,7 +81,6 @@ function DoctorSelectionStep({
                       <span className="text-sm font-medium">5</span>
                     </div>
 
-                    {/* ✅ NO ERROR NOW */}
                     <span className="text-sm text-muted-foreground">
                       ({dentist.appointmentCount ?? 0} appointments)
                     </span>
@@ -128,3 +123,40 @@ function DoctorSelectionStep({
 }
 
 export default DoctorSelectionStep;
+
+//////////////////////////////////////////////////////////
+// 🔥 AVATAR COMPONENT (FINAL FIXED)
+//////////////////////////////////////////////////////////
+
+function Avatar({ name, imageUrl }: { name: string; imageUrl: string }) {
+  const [error, setError] = useState(false);
+
+  const safeName = name || "Doctor";
+
+  // ✅ Correct DiceBear (v9)
+  const dicebearUrl = `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
+    safeName
+  )}`;
+
+  const finalSrc = imageUrl || dicebearUrl;
+
+  // 🔤 fallback (if image fails)
+  if (error) {
+    return (
+      <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-xl font-bold text-primary">
+        {safeName.charAt(0).toUpperCase()}
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      src={finalSrc}
+      alt={safeName}
+      width={64}
+      height={64}
+      onError={() => setError(true)}
+      className="w-16 h-16 rounded-full object-cover"
+    />
+  );
+}
