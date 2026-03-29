@@ -33,56 +33,68 @@ function AppointmentsPage() {
   };
 
   const handleBookAppointment = async () => {
-    if (!selectedDentistId || !selectedDate || !selectedTime) {
-      toast.error("Please fill in all required fields");
-      return;
-    }
+  // ✅ FIX 1: include selectedType validation
+  if (!selectedDentistId || !selectedDate || !selectedTime || !selectedType) {
+    toast.error("Please select doctor, date, time and appointment type");
+    return;
+  }
 
-    const appointmentType = APPOINTMENT_TYPES.find((t) => t.id === selectedType);
+  const appointmentType = APPOINTMENT_TYPES.find(
+    (t) => t.id === selectedType
+  );
 
-    bookAppointmentMutation.mutate(
-      {
-        doctorId: selectedDentistId,
-        date: selectedDate,
-        time: selectedTime,
-        reason: appointmentType?.name,
+  // ✅ FIX 2: safety check
+  if (!appointmentType) {
+    toast.error("Invalid appointment type selected");
+    return;
+  }
+
+  bookAppointmentMutation.mutate(
+    {
+      doctorId: selectedDentistId,
+      date: selectedDate,
+      time: selectedTime,
+      reason: appointmentType.name, // ✅ FIXED (no undefined)
+    },
+    {
+      onSuccess: async (appointment) => {
+        setBookedAppointment(appointment);
+
+        try {
+          await fetch("/api/send-appointment-email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userEmail: appointment.patientEmail,
+              doctorName: appointment.doctorName,
+              appointmentDate: format(
+                new Date(appointment.date),
+                "EEEE, MMMM d, yyyy"
+              ),
+              appointmentTime: appointment.time,
+              appointmentType: appointmentType.name,
+              duration: appointmentType.duration,
+              price: appointmentType.price,
+            }),
+          });
+        } catch (error) {
+          console.error("Email error:", error);
+        }
+
+        setShowConfirmationModal(true);
+
+        // reset
+        setSelectedDentistId(null);
+        setSelectedDate("");
+        setSelectedTime("");
+        setSelectedType("");
+        setCurrentStep(1);
       },
-      {
-        onSuccess: async (appointment) => {
-          setBookedAppointment(appointment);
-
-          try {
-            await fetch("/api/send-appointment-email", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                userEmail: appointment.patientEmail,
-                doctorName: appointment.doctorName,
-                appointmentDate: format(new Date(appointment.date), "EEEE, MMMM d, yyyy"),
-                appointmentTime: appointment.time,
-                appointmentType: appointmentType?.name,
-                duration: appointmentType?.duration,
-                price: appointmentType?.price,
-              }),
-            });
-          } catch (error) {
-            console.error("Email error:", error);
-          }
-
-          setShowConfirmationModal(true);
-
-          setSelectedDentistId(null);
-          setSelectedDate("");
-          setSelectedTime("");
-          setSelectedType("");
-          setCurrentStep(1);
-        },
-        onError: (error) =>
-          toast.error(`Failed to book appointment: ${error.message}`),
-      }
-    );
-  };
-
+      onError: (error) =>
+        toast.error(`Failed to book appointment: ${error.message}`),
+    }
+  );
+};
   return (
     <>
       <Navbar />
