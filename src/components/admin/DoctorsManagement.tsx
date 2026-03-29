@@ -27,9 +27,11 @@ import { adventurer } from "@dicebear/collection";
 
 import { Doctor } from "@prisma/client";
 
-/* ✅ EXTEND TYPE */
+/* ✅ FINAL FIXED TYPE */
 type DoctorWithCount = Doctor & {
   appointmentCount: number;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 function DoctorsManagement() {
@@ -38,7 +40,6 @@ function DoctorsManagement() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-  // ✅ KEEP FULL TYPE HERE
   const [selectedDoctor, setSelectedDoctor] =
     useState<DoctorWithCount | null>(null);
 
@@ -109,9 +110,11 @@ function DoctorsManagement() {
 
                   <div>
                     <div className="font-semibold">{doctor.name}</div>
+
                     <div className="text-sm text-muted-foreground">
                       {doctor.speciality}
                     </div>
+
                     <div className="text-xs text-muted-foreground">
                       {doctor.email} • {doctor.phone}
                     </div>
@@ -150,7 +153,7 @@ function DoctorsManagement() {
         onClose={() => setIsAddDialogOpen(false)}
       />
 
-      {/* ✅ FINAL FIX HERE */}
+      {/* ✅ FINAL FIX */}
       <EditDoctorDialog
         key={selectedDoctor?.id}
         isOpen={isEditDialogOpen}
