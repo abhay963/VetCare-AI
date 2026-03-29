@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { MicIcon, CalendarIcon } from "lucide-react";
+import { SignUpButton } from "@clerk/nextjs";
 
 function CTA() {
   return (
@@ -45,6 +46,7 @@ function CTA() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
+              <SignUpButton mode="modal">
               <Button
                 size="lg"
                 className="px-6 py-3 font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/95 hover:to-primary/85 shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl"
@@ -52,7 +54,8 @@ function CTA() {
                 <MicIcon className="mr-2 h-4 w-4" />
                 Start AI Consultation
               </Button>
-
+              </SignUpButton>
+ <SignUpButton mode="modal">
               <Button
                 size="lg"
                 variant="outline"
@@ -61,6 +64,7 @@ function CTA() {
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 Book a Vet
               </Button>
+              </SignUpButton>
             </div>
           </div>
 

@@ -93,10 +93,11 @@ function PricingSection() {
                     AI health guidance + vet booking
                   </p>
                 </div>
-
+<SignUpButton mode="modal">
                 <Button className="w-full py-3 bg-gradient-to-r from-primary to-primary/90 text-primary-foreground rounded-xl font-semibold shadow-lg">
                   Upgrade to AI Basic
                 </Button>
+                </SignUpButton>
 
                 <div className="space-y-4">
                   <Feature text="Everything in Free" />
@@ -124,7 +125,7 @@ function PricingSection() {
                     Unlimited AI + advanced care insights
                   </p>
                 </div>
-
+<SignUpButton mode="modal">
                 <Button
                   variant="outline"
                   className="w-full py-3 border-2 border-primary/20 hover:border-primary/40 hover:bg-primary/5 rounded-xl font-semibold"
@@ -132,6 +133,7 @@ function PricingSection() {
                   Upgrade to AI Pro
                 </Button>
 
+</SignUpButton>
                 <div className="space-y-4">
                   <Feature text="Everything in AI Basic" />
                   <Feature text="Unlimited AI voice consultations" />

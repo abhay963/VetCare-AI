@@ -38,7 +38,7 @@ const Hero = () => {
                   </div>
 
 
-<h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+<h1 className="text-5xl md:text-5xl lg:text-6xl font-bold tracking-tight">
   <span className="bg-gradient-to-br from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent">
     AI-powered care for
   </span>
