@@ -22,11 +22,11 @@ import { Badge } from "../ui/badge";
 import AddDoctorDialog from "./AddDoctorDialog";
 import EditDoctorDialog from "./EditDoctorDialog";
 
-// ✅ DiceBear (LOCAL avatar)
+// ✅ FIX: Use ONLY adventurer (no avataaars)
 import { createAvatar } from "@dicebear/core";
-import { adventurer, avataaars } from "@dicebear/collection";
+import { adventurer } from "@dicebear/collection";
 
-/* ✅ ✅ CUSTOM TYPE (IMPORTANT FIX) */
+/* ✅ TYPE */
 type DoctorWithCount = {
   id: string;
   name: string;
@@ -58,7 +58,7 @@ function DoctorsManagement() {
     setSelectedDoctor(null);
   };
 
-  // ✅ Avatar generator (no API needed)
+  // ✅ FIXED AVATAR FUNCTION
   const getAvatar = (doctor: DoctorWithCount) => {
     if (
       doctor.imageUrl &&
@@ -69,9 +69,8 @@ function DoctorsManagement() {
     }
 
     const seed = doctor.name || "Doctor";
-    const style = doctor.gender === "MALE" ? adventurer : avataaars;
 
-    const avatar = createAvatar(style, {
+    const avatar = createAvatar(adventurer, {
       seed,
       size: 128,
       radius: 50,
@@ -146,7 +145,6 @@ function DoctorsManagement() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                  {/* ✅ FIXED ERROR HERE */}
                   <div className="text-center">
                     <div className="font-semibold text-primary">
                       {doctor.appointmentCount ?? 0}
