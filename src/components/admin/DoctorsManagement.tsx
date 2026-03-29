@@ -25,9 +25,9 @@ import EditDoctorDialog from "./EditDoctorDialog";
 import { createAvatar } from "@dicebear/core";
 import { adventurer } from "@dicebear/collection";
 
-// ✅ FIX: extend Prisma type
 import { Doctor } from "@prisma/client";
 
+/* ✅ EXTEND TYPE */
 type DoctorWithCount = Doctor & {
   appointmentCount: number;
 };
@@ -38,7 +38,7 @@ function DoctorsManagement() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-  // ✅ FIXED TYPE
+  // ✅ KEEP FULL TYPE HERE
   const [selectedDoctor, setSelectedDoctor] =
     useState<DoctorWithCount | null>(null);
 
@@ -61,10 +61,8 @@ function DoctorsManagement() {
       return doctor.imageUrl;
     }
 
-    const seed = doctor.name || "Doctor";
-
     const avatar = createAvatar(adventurer, {
-      seed,
+      seed: doctor.name,
       size: 128,
       radius: 50,
     });
@@ -82,14 +80,11 @@ function DoctorsManagement() {
               Veterinary Doctors
             </CardTitle>
             <CardDescription>
-              Manage and oversee all veterinary doctors in Vet Care AI
+              Manage and oversee all veterinary doctors
             </CardDescription>
           </div>
 
-          <Button
-            onClick={() => setIsAddDialogOpen(true)}
-            className="bg-gradient-to-r from-primary to-primary/80"
-          >
+          <Button onClick={() => setIsAddDialogOpen(true)}>
             <PlusIcon className="mr-2 size-4" />
             Add Doctor
           </Button>
@@ -100,7 +95,7 @@ function DoctorsManagement() {
             {(doctors as DoctorWithCount[]).map((doctor) => (
               <div
                 key={doctor.id}
-                className="flex items-center justify-between p-4 rounded-xl border hover:shadow-md transition-all"
+                className="flex items-center justify-between p-4 rounded-xl border hover:shadow-md"
               >
                 <div className="flex items-center gap-4">
                   <Image
@@ -108,26 +103,22 @@ function DoctorsManagement() {
                     alt={doctor.name}
                     width={48}
                     height={48}
-                    className="size-12 rounded-full object-cover"
+                    className="rounded-full"
                     unoptimized
                   />
 
                   <div>
                     <div className="font-semibold">{doctor.name}</div>
-
                     <div className="text-sm text-muted-foreground">
                       {doctor.speciality}
                     </div>
-
-                    <div className="flex gap-4 mt-1 text-xs text-muted-foreground">
-                      <span>{doctor.email}</span>
-                      <span>{doctor.phone}</span>
+                    <div className="text-xs text-muted-foreground">
+                      {doctor.email} • {doctor.phone}
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  {/* ✅ FIXED */}
                   <div className="text-center">
                     <div className="font-semibold text-primary">
                       {doctor.appointmentCount ?? 0}
@@ -143,11 +134,7 @@ function DoctorsManagement() {
                     <Badge variant="secondary">Inactive</Badge>
                   )}
 
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleEditDoctor(doctor)}
-                  >
+                  <Button onClick={() => handleEditDoctor(doctor)}>
                     <EditIcon className="size-4 mr-1" />
                     Edit
                   </Button>
@@ -163,12 +150,28 @@ function DoctorsManagement() {
         onClose={() => setIsAddDialogOpen(false)}
       />
 
-      {/* ✅ FIX: cast back to Prisma Doctor */}
+      {/* ✅ FINAL FIX HERE */}
       <EditDoctorDialog
         key={selectedDoctor?.id}
         isOpen={isEditDialogOpen}
         onClose={handleCloseEditDialog}
-        doctor={selectedDoctor as Doctor}
+        doctor={
+          selectedDoctor
+            ? {
+                id: selectedDoctor.id,
+                name: selectedDoctor.name,
+                email: selectedDoctor.email,
+                phone: selectedDoctor.phone,
+                speciality: selectedDoctor.speciality,
+                bio: selectedDoctor.bio,
+                imageUrl: selectedDoctor.imageUrl,
+                gender: selectedDoctor.gender,
+                isActive: selectedDoctor.isActive,
+                createdAt: selectedDoctor.createdAt,
+                updatedAt: selectedDoctor.updatedAt,
+              }
+            : null
+        }
       />
     </>
   );
