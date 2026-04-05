@@ -41,7 +41,9 @@ const steps: Step[] = [
 
 const HowItWorks: React.FC = () => {
   return (
-    <section className="relative mx-auto max-w-7xl py-28 px-6 overflow-hidden">
+    <section 
+    id="how-it-works"
+    className="relative mx-auto max-w-7xl py-28 px-6 overflow-hidden">
 
       {/* ================= HEADER ================= */}
       <div className="text-center mb-20 space-y-6">

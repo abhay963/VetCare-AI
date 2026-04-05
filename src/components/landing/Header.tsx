@@ -27,18 +27,20 @@ function Header() {
             height={32}
             className="w-10 transition-transform group-hover:scale-110"
           />
-          <span className="font-semibold text-lg tracking-tight">
+          <span 
+          
+          className="font-semibold text-lg tracking-tight">
             VetCare AI
           </span>
         </Link>
 
         {/* 🔹 CENTER NAV LINKS */}
         <div className="hidden md:flex items-center gap-8">
-          <Link href="#" className="nav-link">
+          <Link href="/#how-it-works" className="nav-link">
             How it Works
           </Link>
 
-          <Link href="#" className="nav-link">
+          <Link href="/#pricing" className="nav-link">
             Pricing
           </Link>
 

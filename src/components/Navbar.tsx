@@ -26,6 +26,13 @@ function Navbar() {
               <HomeIcon className="w-4 h-4" />
               <span className="hidden md:inline">Dashboard</span>
             </Link>
+            <Link href="hospital" className="nav-link">
+            Nearby Hospital
+          </Link>
+
+         <Link href="/remedies" className="nav-link">
+  Home Remedies
+</Link>
 
             <Link href="/appointments" className="flex items-center gap-2 text-muted-foreground">
               <CalendarIcon className="w-4 h-4" />

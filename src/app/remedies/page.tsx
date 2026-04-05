@@ -1,10 +1,10 @@
-
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { Mic, Send, Loader2, Volume2, Square, Stethoscope } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "@/components/landing/Header";
-
+import { SignedIn, SignedOut } from "@clerk/nextjs";
+import Navbar from "@/components/Navbar";
 interface Message {
   role: "user" | "assistant";
   content: string;
@@ -145,14 +145,20 @@ export default function RemediesPage() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-zinc-950 text-white overflow-hidden">
+    <div className="h-screen flex flex-col  text-white ">
       {/* Fixed Header */}
-      <header className="sticky top-0 z-50 bg-zinc-950 shadow-lg backdrop-blur-md bg-opacity-90 border-b border-zinc-800">
-        <Header />
-      </header>
+     <header className="fixed top-0 left-0 right-0 z-50 bg-zinc-950 border-b border-zinc-800">
+  <SignedOut>
+    <Header />
+  </SignedOut>
+
+  <SignedIn>
+    <Navbar />
+  </SignedIn>
+</header>
 
       {/* Main Chat Area (Scrollable) */}
-      <main className="flex-1 flex flex-col overflow-hidden">
+      <main className="flex-1 flex flex-col mt-[80px] overflow-hidden">
         {/* Messages Container (Scrollable) */}
         <div className="flex-1 overflow-y-auto px-4 py-6 custom-scrollbar">
           <div className="max-w-3xl mx-auto flex flex-col space-y-6">
@@ -166,11 +172,11 @@ export default function RemediesPage() {
                   <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-emerald-500/10 flex items-center justify-center border-2 border-emerald-500/20 shadow-lg">
                     <Stethoscope className="w-14 h-14 sm:w-16 sm:h-16 text-emerald-400" />
                   </div>
-                  <div className="absolute -top-2 -right-2 text-4xl sm:text-5xl animate-bounce">🐄</div>
-                  <div className="absolute -bottom-2 -left-2 text-3xl sm:text-4xl animate-pulse">🐕</div>
+                  <div className="absolute  -right-2 text-4xl sm:text-5xl animate-in">🐄</div>
+                  <div className="absolute -bottom-2 -left-2 text-3xl sm:text-4xl animate-in">🐕</div>
                 </div>
 
-                <h1 className="text-2xl sm:text-3xl font-bold mb-2">Pashu Doctor</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold mb-2 mt-3">Pashu Doctor</h1>
                 <p className="text-emerald-400 text-base sm:text-lg mb-4">Aapke pashuon ka AI dost</p>
                 <p className="max-w-xs sm:max-w-sm text-zinc-400 text-sm sm:text-base leading-relaxed">
                   Apni gaay, bhains, bhed-bakri ya pet ki bimari bataiye.
@@ -195,8 +201,9 @@ export default function RemediesPage() {
                         </div>
                       )}
 
+                      {/* Improved Message Box with whitespace-pre-wrap */}
                       <div
-                        className={`p-3 sm:p-4 rounded-2xl text-sm sm:text-[15px] leading-relaxed break-words ${
+                        className={`p-3 sm:p-4 rounded-2xl text-sm sm:text-[15px] leading-relaxed break-words whitespace-pre-wrap ${
                           msg.role === "user"
                             ? "bg-emerald-600 text-white rounded-tr-none"
                             : "bg-zinc-900 border border-zinc-800 rounded-tl-none"
@@ -205,7 +212,7 @@ export default function RemediesPage() {
                         {msg.content}
 
                         {msg.role === "assistant" && (
-                          <div className="flex gap-2 mt-3">
+                          <div className="flex gap-2 mt-4 pt-3 border-t border-zinc-700">
                             <button
                               onClick={() => speak(msg.content, msg.id)}
                               disabled={isSpeaking && currentlySpeakingId === msg.id}
@@ -265,7 +272,7 @@ export default function RemediesPage() {
         </div>
 
         {/* Fixed Input Area */}
-        <div className="sticky bottom-0 left-0 right-0 bg-gradient-to-t from-zinc-950 via-zinc-950 to-transparent px-4 pb-6 pt-2 z-50">
+        <div className="sticky bottom-0 left-0 right-0  px-4 pb-6 pt-2 z-50">
           <div className="max-w-3xl mx-auto">
             <div className="bg-zinc-900 border border-zinc-700 rounded-3xl p-2 shadow-2xl flex items-center gap-2 focus-within:border-emerald-500 transition">
               <button

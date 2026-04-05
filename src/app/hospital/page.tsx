@@ -1,7 +1,8 @@
 "use client";
-
+import { SignedIn, SignedOut } from "@clerk/nextjs";
+import Navbar from "@/components/Navbar";
 import Header from "@/components/landing/Header";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   MapPin,
   Navigation,
@@ -10,32 +11,28 @@ import {
   AlertCircle,
   User,
 } from "lucide-react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import L from "leaflet";
+import dynamic from "next/dynamic";
 
-// Fix Leaflet default icons
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
-  iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
-});
+// Dynamic imports for Leaflet (SSR disabled)
+const MapContainer = dynamic(
+  () => import("react-leaflet").then((mod) => mod.MapContainer),
+  { ssr: false }
+);
 
-// Custom pulsing vet marker
-const createPulsingIcon = () => {
-  return L.divIcon({
-    className: "custom-pulsing-marker",
-    html: `
-      <div class="pulsing-container">
-        <div class="pulse-ring"></div>
-        <div class="vet-marker">🏥</div>
-      </div>
-    `,
-    iconSize: [42, 42],
-    iconAnchor: [21, 42],
-    popupAnchor: [0, -40],
-  });
-};
+const TileLayer = dynamic(
+  () => import("react-leaflet").then((mod) => mod.TileLayer),
+  { ssr: false }
+);
+
+const Marker = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Marker),
+  { ssr: false }
+);
+
+const Popup = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Popup),
+  { ssr: false }
+);
 
 interface Hospital {
   display_name: string;
@@ -51,42 +48,85 @@ export default function HospitalsPage() {
   const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null);
   const [locating, setLocating] = useState(false);
   const [selectedHospital, setSelectedHospital] = useState<Hospital | null>(null);
+  const [searchedCity, setSearchedCity] = useState("");
 
-  // Auto-detect location
+  // Create pulsing icon safely (only on client)
+  const pulsingIcon = useMemo(() => {
+    if (typeof window === "undefined") return null;
+
+    // Safe import and fix for Leaflet
+    const L = require("leaflet");
+
+    // Fix default icons
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
+      iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+      shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+    });
+
+    return L.divIcon({
+      className: "custom-pulsing-marker",
+      html: `
+        <div class="pulsing-container">
+          <div class="pulse-ring"></div>
+          <div class="vet-marker">🏥</div>
+        </div>
+      `,
+      iconSize: [42, 42],
+      iconAnchor: [21, 42],
+      popupAnchor: [0, -40],
+    });
+  }, []);
+
+  // Auto-detect user location
   useEffect(() => {
-    if (navigator.geolocation) {
+    if (typeof window !== "undefined" && navigator.geolocation) {
       setLocating(true);
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
           setUserLocation({ lat: latitude, lon: longitude });
+          searchNearbyVets(latitude, longitude, "Your Current Location");
           setLocating(false);
-          searchNearbyVets(latitude, longitude);
         },
         () => {
           setLocating(false);
-          setError("Please allow location access or search manually.");
+          setError("Location access denied. Please search manually.");
         }
       );
     }
   }, []);
 
-  const searchNearbyVets = async (lat: number, lon: number) => {
+  const searchNearbyVets = async (lat: number, lon: number, locationName: string = "") => {
     setLoading(true);
     setError("");
     setHospitals([]);
     setSelectedHospital(null);
+    setSearchedCity(locationName);
 
     try {
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=veterinary+hospital&` +
-        `viewbox=${lon - 0.8},${lat - 0.8},${lon + 0.8},${lat + 0.8}&bounded=1&limit=20`
-      );
+      const viewbox = `${lon - 0.5},${lat - 0.5},${lon + 0.5},${lat + 0.5}`;
+
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=veterinary&viewbox=${viewbox}&bounded=1&limit=20`;
+
+      const res = await fetch(url, {
+        headers: {
+          "User-Agent": "VetCareAI/1.0 (contact@vetcareai.com)",
+        },
+      });
+
+      if (!res.ok) throw new Error("Failed to fetch hospitals");
+
       const data: Hospital[] = await res.json();
       setHospitals(data);
-      if (data.length === 0) setError("No veterinary hospitals found nearby.");
+
+      if (data.length === 0) {
+        setError(`No veterinary hospitals found in ${locationName || "this area"}.`);
+      }
     } catch (err) {
-      setError("Unable to fetch hospitals. Please try again.");
+      console.error(err);
+      setError("Unable to fetch hospitals. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -94,6 +134,7 @@ export default function HospitalsPage() {
 
   const searchHospitals = async () => {
     if (!city.trim()) return;
+
     setLoading(true);
     setError("");
     setHospitals([]);
@@ -101,43 +142,63 @@ export default function HospitalsPage() {
 
     try {
       const geoRes = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}&limit=1`
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}&limit=1`,
+        {
+          headers: {
+            "User-Agent": "VetCareAI/1.0 (contact@vetcareai.com)",
+          },
+        }
       );
+
       const geoData = await geoRes.json();
 
-      if (!geoData.length) {
+      if (!geoData || geoData.length === 0) {
         setError("City not found. Please try another location.");
         setLoading(false);
         return;
       }
 
-      const { lat, lon } = geoData[0];
-      setUserLocation({ lat: parseFloat(lat), lon: parseFloat(lon) });
-      await searchNearbyVets(parseFloat(lat), parseFloat(lon));
+      const { lat, lon, display_name } = geoData[0];
+      const parsedLat = parseFloat(lat);
+      const parsedLon = parseFloat(lon);
+
+      setUserLocation({ lat: parsedLat, lon: parsedLon });
+      setSearchedCity(display_name.split(",")[0] || city);
+
+      await searchNearbyVets(parsedLat, parsedLon, city.trim());
     } catch (err) {
-      setError("Something went wrong.");
+      console.error(err);
+      setError("Something went wrong while searching.");
     } finally {
       setLoading(false);
     }
   };
 
   const getDirections = (lat: string, lon: string) => {
-    window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`, "_blank");
+    if (typeof window !== "undefined") {
+      window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`, "_blank");
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0f0a] text-white overflow-hidden">
-      {/* Subtle background pattern */}
+    <div className="min-h-screen  text-white overflow-hidden">
       <div className="fixed inset-0 bg-[radial-gradient(#22c55e_0.6px,transparent_1px)] bg-[length:50px_50px] opacity-10 pointer-events-none" />
 
-      <div className="relative p-6 max-w-7xl mx-auto pt-24 pb-20">
-        <Header />
+      <header className="fixed top-0 left-0 right-0 z-50 bg-zinc-950 border-b border-zinc-800">
+        <SignedOut>
+          <Header />
+        </SignedOut>
+        <SignedIn>
+          <Navbar />
+        </SignedIn>
+      </header>
 
+      <div className="pt-24 pb-20 relative p-6 max-w-7xl mx-auto">
         {/* Page Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-3 px-6 py-3 bg-emerald-900/50 border border-emerald-700 rounded-full mb-6">
             <div className="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse" />
-            <span className="text-sm font-medium tracking-widest text-emerald-300">NEARBY HOSPITAL</span>
+            <span className="text-sm font-medium tracking-widest text-emerald-300">NEARBY VET CARE</span>
           </div>
 
           <h1 className="text-6xl font-bold tracking-tighter mb-4">
@@ -153,13 +214,14 @@ export default function HospitalsPage() {
           <div className="bg-zinc-900/80 border border-emerald-800/70 backdrop-blur-xl rounded-3xl p-3 flex flex-col md:flex-row gap-4">
             <button
               onClick={() => {
-                if (navigator.geolocation) {
+                if (typeof window !== "undefined" && navigator.geolocation) {
                   setLocating(true);
                   navigator.geolocation.getCurrentPosition(
                     (pos) => {
                       const { latitude, longitude } = pos.coords;
                       setUserLocation({ lat: latitude, lon: longitude });
-                      searchNearbyVets(latitude, longitude);
+                      searchNearbyVets(latitude, longitude, "Your Current Location");
+                      setLocating(false);
                     },
                     () => setLocating(false)
                   );
@@ -183,20 +245,21 @@ export default function HospitalsPage() {
               />
               <button
                 onClick={searchHospitals}
-                className="px-12 bg-white text-black font-semibold rounded-2xl hover:bg-emerald-100 transition-all flex items-center gap-3"
+                disabled={loading || !city.trim()}
+                className="px-12 bg-white text-black font-semibold rounded-2xl hover:bg-emerald-100 transition-all flex items-center gap-3 disabled:opacity-70"
               >
-                <Search className="w-5 h-5" />
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Search className="w-5 h-5" />}
                 Search
               </button>
             </div>
           </div>
         </div>
 
-        {/* Status */}
+        {/* Status Messages */}
         {loading && (
           <div className="flex items-center justify-center gap-4 py-16 text-emerald-400 text-lg">
             <Loader2 className="w-8 h-8 animate-spin" />
-            Finding nearby veterinary hospitals...
+            Finding veterinary hospitals...
           </div>
         )}
 
@@ -208,14 +271,13 @@ export default function HospitalsPage() {
         )}
 
         {/* Map + List */}
-        {userLocation && hospitals.length > 0 && (
+        {userLocation && hospitals.length > 0 && pulsingIcon && (
           <div className="grid lg:grid-cols-12 gap-8">
-            {/* Map */}
             <div className="lg:col-span-7">
               <div className="bg-zinc-900 rounded-3xl overflow-hidden border border-emerald-800/70 h-[620px] relative shadow-2xl">
                 <div className="absolute top-6 left-6 z-10 bg-black/80 backdrop-blur-md px-5 py-2.5 rounded-2xl border border-emerald-700 flex items-center gap-2 text-sm">
                   <User className="w-4 h-4 text-emerald-400" />
-                  Interactive Map
+                  {searchedCity ? `Hospitals near ${searchedCity}` : "Interactive Map"}
                 </div>
 
                 <MapContainer
@@ -228,27 +290,25 @@ export default function HospitalsPage() {
                     attribution='&copy; OpenStreetMap contributors'
                   />
 
-                  {/* User Location */}
                   <Marker position={[userLocation.lat, userLocation.lon]}>
                     <Popup>You are here</Popup>
                   </Marker>
 
-                  {/* Hospital Markers with Pulse Animation */}
                   {hospitals.map((hospital, i) => (
                     <Marker
                       key={i}
                       position={[parseFloat(hospital.lat), parseFloat(hospital.lon)]}
-                      icon={createPulsingIcon()}
+                      icon={pulsingIcon}
                       eventHandlers={{
                         click: () => setSelectedHospital(hospital),
                       }}
                     >
                       <Popup>
-                        <div className="text-sm">
+                        <div className="text-sm min-w-[200px]">
                           <strong className="block mb-2">{hospital.display_name.split(",")[0]}</strong>
                           <button
                             onClick={() => getDirections(hospital.lat, hospital.lon)}
-                            className="mt-2 w-full bg-emerald-600 hover:bg-emerald-700 py-2 rounded-xl text-white text-xs font-medium"
+                            className="mt-3 w-full bg-emerald-600 hover:bg-emerald-700 py-2.5 rounded-xl text-white text-xs font-medium"
                           >
                             Get Directions →
                           </button>
@@ -262,9 +322,9 @@ export default function HospitalsPage() {
 
             {/* Hospital List */}
             <div className="lg:col-span-5 space-y-6">
-              <div className="flex items-center justify-between">
-                <h2 className="text-3xl font-semibold tracking-tight">Nearby Hospitals ({hospitals.length})</h2>
-              </div>
+              <h2 className="text-3xl font-semibold tracking-tight">
+                Veterinary Hospitals {searchedCity && `near ${searchedCity}`} ({hospitals.length})
+              </h2>
 
               <div className="space-y-5 max-h-[580px] overflow-y-auto pr-4 custom-scroll">
                 {hospitals.map((hospital, i) => (
@@ -281,7 +341,7 @@ export default function HospitalsPage() {
                       <div className="w-14 h-14 bg-emerald-900/80 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0">
                         🏥
                       </div>
-                      <div>
+                      <div className="flex-1">
                         <h3 className="font-semibold text-xl leading-tight group-hover:text-emerald-300 transition-colors">
                           {hospital.display_name.split(",")[0]}
                         </h3>
@@ -295,6 +355,7 @@ export default function HospitalsPage() {
                       <a
                         href={`https://www.google.com/maps?q=${hospital.lat},${hospital.lon}`}
                         target="_blank"
+                        rel="noopener noreferrer"
                         className="flex-1 text-center py-4 border border-emerald-700 hover:border-emerald-400 rounded-2xl text-sm font-medium transition-colors"
                       >
                         View on Map
@@ -318,12 +379,12 @@ export default function HospitalsPage() {
         )}
 
         {/* Empty State */}
-        {!loading && hospitals.length === 0 && !error && (
+        {!loading && hospitals.length === 0 && !error && !userLocation && (
           <div className="text-center py-28">
             <div className="text-[120px] mb-8 opacity-80">🐾</div>
             <h3 className="text-4xl font-medium mb-4">Find Care Nearby</h3>
             <p className="text-emerald-200/70 max-w-md mx-auto text-lg">
-              Use your current location or search a city to discover trusted veterinary hospitals on the map.
+              Use your current location or enter a city name to discover trusted veterinary hospitals.
             </p>
           </div>
         )}
@@ -366,7 +427,7 @@ export default function HospitalsPage() {
           70% { transform: scale(2.4); opacity: 0; }
           100% { transform: scale(2.4); opacity: 0; }
         }
-        .custom-scroll::-webkit-scrollbar { width: 5px; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
         .custom-scroll::-webkit-scrollbar-thumb {
           background: #84cc16;
           border-radius: 20px;
