@@ -44,13 +44,34 @@ function Header() {
             Pricing
           </Link>
 
-          <Link href="hospital" className="nav-link">
-            Nearby Hospital
-          </Link>
+<SignedIn>
+  <Link href="/hospital" className="nav-link">
+    Nearby Hospital
+  </Link>
+</SignedIn>
 
-         <Link href="/remedies" className="nav-link">
-  Home Remedies
-</Link>
+<SignedOut>
+  <SignInButton mode="modal">
+    <button className="nav-link cursor-pointer">
+      Nearby Hospital
+    </button>
+  </SignInButton>
+</SignedOut>
+
+
+<SignedIn>
+  <Link href="/remedies" className="nav-link">
+    Home Remedies
+  </Link>
+</SignedIn>
+
+<SignedOut>
+  <SignInButton mode="modal">
+    <button className="nav-link cursor-pointer">
+      Home Remedies
+    </button>
+  </SignInButton>
+</SignedOut>
 
           <Link href="about" className="nav-link">
             About

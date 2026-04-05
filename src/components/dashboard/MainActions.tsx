@@ -12,6 +12,54 @@ export default function MainActions() {
   return (
     <div className="grid md:grid-cols-2 gap-8 mb-12">
 
+{/* UPLOAD ANIMAL DATA */}
+<Card className="relative overflow-hidden group hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/30">
+  
+  {/* hover bg */}
+  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+  <CardContent className="relative p-8">
+    
+    {/* HEADER */}
+    <div className="flex items-center gap-4 mb-6">
+      <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 relative">
+        
+        {/* main icon */}
+        <PawPrint className="w-8 h-8 text-primary" />
+
+        {/* small overlay */}
+        <Stethoscope className="w-4 h-4 text-primary absolute bottom-2 right-2" />
+      </div>
+
+      <div>
+        <h3 className="text-2xl font-bold mb-2">Analyze Animal Health</h3>
+        <p className="text-muted-foreground">
+          Upload animal details for AI-based diagnosis
+        </p>
+      </div>
+    </div>
+
+    {/* FEATURES */}
+    <div className="space-y-4">
+      <Feature text="Upload multiple images/videos" />
+      <Feature text="Select animal type & body part" />
+      <Feature text="Add symptoms (text or voice)" />
+    </div>
+
+    {/* BUTTON */}
+    <Link
+      href="/analyze"
+      className={buttonVariants({
+        variant: "default",
+        className:
+          "w-full mt-6 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300",
+      })}
+    >
+      <PawPrint className="mr-2 h-5 w-5" />
+      Start Analysis
+    </Link>
+  </CardContent>
+</Card>
       {/* AI VOICE ASSISTANT */}
       <Card className="relative overflow-hidden group hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/30">
         

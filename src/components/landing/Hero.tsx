@@ -78,12 +78,16 @@ const Hero = () => {
 
   {/* NOT LOGGED IN */}
   <SignedOut>
-    <SignUpButton mode="modal">
-      <Button size="lg">
-        <MicIcon className="mr-2 size-5" />
-        Try Voice Agent
-      </Button>
-    </SignUpButton>
+  <SignUpButton 
+    mode="modal"
+    forceRedirectUrl="/remedies"
+  >
+    <Button size="lg">
+      <MicIcon className="mr-2 size-5" />
+      Talk with AI
+    </Button>
+  </SignUpButton>
+
 
     <SignUpButton mode="modal">
       <Button size="lg" variant="outline">

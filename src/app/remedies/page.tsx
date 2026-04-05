@@ -168,21 +168,43 @@ export default function RemediesPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="flex flex-col items-center justify-center text-center h-full py-12 px-4"
               >
-                <div className="relative mb-8">
-                  <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-emerald-500/10 flex items-center justify-center border-2 border-emerald-500/20 shadow-lg">
-                    <Stethoscope className="w-14 h-14 sm:w-16 sm:h-16 text-emerald-400" />
-                  </div>
-                  <div className="absolute  -right-2 text-4xl sm:text-5xl animate-in">🐄</div>
-                  <div className="absolute -bottom-2 -left-2 text-3xl sm:text-4xl animate-in">🐕</div>
-                </div>
+              <div className="relative mb-6">
+  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-emerald-500/10 flex items-center justify-center border-2 border-emerald-500/20 shadow-md">
+    <Stethoscope className="w-8 h-8 sm:w-10 sm:h-10 text-emerald-400" />
+  </div>
 
-                <h1 className="text-2xl sm:text-3xl font-bold mb-2 mt-3">Pashu Doctor</h1>
-                <p className="text-emerald-400 text-base sm:text-lg mb-4">Aapke pashuon ka AI dost</p>
-                <p className="max-w-xs sm:max-w-sm text-zinc-400 text-sm sm:text-base leading-relaxed">
-                  Apni gaay, bhains, bhed-bakri ya pet ki bimari bataiye.
-                  <br />
-                  Main Hindi aur English mein upchar bataunga.
-                </p>
+  <div className="absolute -right-1 text-2xl sm:text-3xl animate-in">
+    🐄
+  </div>
+
+  <div className="absolute -bottom-1 -left-1 text-2xl sm:text-3xl animate-in">
+    🐕
+  </div>
+</div>
+           <div className="text-center">
+  
+  <motion.h1
+    initial={{ opacity: 0, y: -20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+    className="text-2xl sm:text-3xl font-bold mb-2 mt-3 
+    bg-gradient-to-r from-emerald-400 to-teal-500 
+    bg-clip-text text-transparent"
+  >
+    VetCare AI
+  </motion.h1>
+
+  <motion.p
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 0.2, duration: 0.6 }}
+    className="text-emerald-400 text-sm sm:text-base mb-4 max-w-sm mx-auto"
+  >
+    Instant AI-powered remedies for better animal care.
+  </motion.p>
+
+</div>
+                
               </motion.div>
             ) : (
               <AnimatePresence mode="popLayout">
