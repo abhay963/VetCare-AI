@@ -46,11 +46,11 @@ function Header() {
             Nearby Hospital
           </Link>
 
-          <Link href="#" className="nav-link">
-            Home Remedies
-          </Link>
+         <Link href="/remedies" className="nav-link">
+  Home Remedies
+</Link>
 
-          <Link href="#" className="nav-link">
+          <Link href="about" className="nav-link">
             About
           </Link>
         </div>
