@@ -1,394 +1,198 @@
 <div align="center">
 
-# 🐾🤖 VetCare AI
+# 🐾 VetCare AI
 
-### AI-Powered Veterinary Healthcare Platform
+### Intelligent Veterinary Healthcare Platform Powered by Artificial Intelligence
 
-<img src="https://readme-typing-svg.herokuapp.com?size=28&duration=3500&color=4F46E5&center=true&vCenter=true&width=900&lines=AI-Powered+Veterinary+Healthcare+Platform;Smart+Disease+Detection+for+Animals;Intelligent+Vet+Booking+System;Built+with+Next.js+%2B+TypeScript+%2B+Prisma;Transforming+Animal+Healthcare+with+AI+🚀" />
+<p align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?size=24&duration=3000&color=4F46E5&center=true&vCenter=true&width=900&lines=AI-Powered+Animal+Disease+Detection;Smart+Veterinary+Consultation+Platform;Image-Based+Diagnosis+and+Treatment+Suggestions;Built+with+Next.js+%2B+TypeScript+%2B+Prisma" />
+</p>
 
-<br/>
+<p align="center">
 
-<a href="https://vet-care-ai.vercel.app/" target="_blank">
-  <img src="https://img.shields.io/badge/🚀_Live_Demo-Visit_Website-10B981?style=for-the-badge" />
+<a href="https://vet-care-ai.vercel.app/">
+  <img src="https://img.shields.io/badge/🚀_Live_Demo-Visit_Platform-10B981?style=for-the-badge" />
 </a>
 
-<a href="https://github.com/yourusername/vetcare-ai" target="_blank">
-  <img src="https://img.shields.io/badge/⭐_GitHub-Repository-181717?style=for-the-badge&logo=github" />
+<a href="https://github.com/YOUR_USERNAME/VetCareAI">
+  <img src="https://img.shields.io/github/stars/YOUR_USERNAME/VetCareAI?style=for-the-badge" />
 </a>
 
-<br/><br/>
+<a href="https://github.com/YOUR_USERNAME/VetCareAI/network/members">
+  <img src="https://img.shields.io/github/forks/YOUR_USERNAME/VetCareAI?style=for-the-badge" />
+</a>
 
-<img src="./public/hero.png" alt="VetCare AI Banner" width="100%" />
+</p>
+
+<p align="center">
+
+<img src="https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js" />
+<img src="https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript" />
+<img src="https://img.shields.io/badge/TailwindCSS-38BDF8?style=flat-square&logo=tailwindcss" />
+<img src="https://img.shields.io/badge/Prisma-ORM-2D3748?style=flat-square&logo=prisma" />
+<img src="https://img.shields.io/badge/PostgreSQL-Neon-336791?style=flat-square&logo=postgresql" />
+<img src="https://img.shields.io/badge/Clerk-Authentication-6C47FF?style=flat-square" />
+
+</p>
 
 </div>
 
 ---
 
-## 🌟 Overview
-
-VetCare AI is a next-generation veterinary healthcare platform designed to help pet owners, farmers, and veterinarians diagnose animal diseases faster using Artificial Intelligence.
-
-The platform combines:
-
-- 🧠 AI Disease Detection
-- 📸 Image-Based Diagnosis
-- 💊 Treatment Recommendations
-- 🥗 Diet Suggestions
-- 🩺 Vet Discovery & Booking
-- 🔐 Secure Authentication
-- ☁️ Cloud-Native Infrastructure
-
-to create a complete digital animal healthcare ecosystem.
-
----
-
-## 🎯 Problem Statement
-
-Access to veterinary care is often limited in rural and remote areas.
-
-Many pet owners and livestock farmers struggle to:
-
-- Identify diseases early
-- Access nearby veterinarians
-- Receive immediate guidance
-- Manage animal healthcare efficiently
-
-VetCare AI bridges this gap using Artificial Intelligence and modern cloud technologies.
-
----
-
-# 📸 Platform Preview
+## 📸 Product Preview
 
 <div align="center">
-
 <img src="./public/hero.png" width="100%" />
-
 </div>
 
 ---
 
-# ✨ Features
+## 🌍 Live Platform
 
-## 🧠 AI Disease Detection
-
-Upload an animal image and receive:
-
-- Disease predictions
-- Symptom analysis
-- Risk assessment
-- Confidence scores
+### 🔗 https://vet-care-ai.vercel.app/
 
 ---
 
-## 📸 Smart Image Upload
+# Problem
 
-Supports:
+Millions of pet owners and livestock farmers lack immediate access to veterinary expertise, especially in rural and underserved regions.
 
-- Pet Images
-- Livestock Images
-- Multiple Animal Categories
+Delayed diagnosis often leads to:
 
-AI analyzes uploaded images and identifies possible diseases.
-
----
-
-## 💊 Treatment Recommendations
-
-Generate:
-
-- Preliminary treatment guidance
-- Medicine recommendations
-- Recovery precautions
+- Increased treatment costs
+- Disease progression
+- Livestock productivity loss
+- Reduced animal welfare
 
 ---
 
-## 🥗 Diet Suggestions
+# Solution
 
-Receive personalized:
-
-- Food plans
-- Nutritional guidance
-- Recovery diets
-
-based on disease conditions.
+VetCare AI leverages Artificial Intelligence to provide instant preliminary disease analysis from animal images and symptoms while connecting users with veterinary professionals through a modern digital healthcare ecosystem.
 
 ---
 
-## 🩺 Veterinary Discovery
+# Core Features
 
-Find:
+### 🧠 AI Disease Detection
 
-- Nearby veterinarians
-- Clinics
-- Animal hospitals
+Analyze animal images using AI to identify potential diseases and health conditions.
 
-with appointment scheduling support.
+### 📷 Image-Based Diagnosis
 
----
+Upload animal photos and receive intelligent health assessments within seconds.
 
-## 📅 Appointment Booking
+### 💊 Treatment Recommendations
 
-Book appointments directly through the platform.
+Generate AI-assisted treatment guidance and recovery recommendations.
 
-Features include:
+### 🥗 Personalized Diet Suggestions
 
-- Schedule Selection
-- Vet Availability
-- Appointment Tracking
+Nutrition plans tailored to disease conditions and recovery stages.
 
----
+### 🩺 Veterinary Discovery
 
-## 🔐 Secure Authentication
+Locate nearby veterinarians, clinics, and hospitals.
 
-Powered by Clerk.
+### 📅 Appointment Management
 
-Supports:
+Book, manage, and track veterinary consultations.
 
-- Google Login
-- Email Authentication
-- Session Management
-- Protected Routes
+### 🔐 Secure Authentication
+
+Enterprise-grade authentication powered by Clerk.
 
 ---
 
-## ⚡ Modern UI/UX
+# Technology Stack
 
-Built using:
-
-- Next.js 16
-- Tailwind CSS
-- TypeScript
-
-for a blazing-fast user experience.
+| Layer | Technologies |
+|---------|-------------|
+| Frontend | Next.js 16, React, TypeScript |
+| Styling | Tailwind CSS |
+| Authentication | Clerk |
+| Database | PostgreSQL (Neon) |
+| ORM | Prisma |
+| Hosting | Vercel |
+| AI Layer | Gemini API |
 
 ---
 
-# 🏗️ System Architecture
+# Architecture
 
 ```text
-User
- │
- ▼
-Frontend (Next.js)
- │
- ▼
-Authentication (Clerk)
- │
- ▼
-Backend APIs
- │
- ▼
-AI Diagnosis Engine
- │
- ├── Disease Detection
- │
- ├── Treatment Suggestions
- │
- └── Diet Recommendations
- │
- ▼
-Database (Neon PostgreSQL)
- │
- ▼
+Client
+  │
+  ▼
+Next.js Frontend
+  │
+  ▼
+Clerk Authentication
+  │
+  ▼
+API Layer
+  │
+  ├── Disease Analysis
+  ├── Treatment Engine
+  ├── Diet Recommendation
+  └── Appointment System
+  │
+  ▼
 Prisma ORM
+  │
+  ▼
+Neon PostgreSQL
 ```
 
----
-
-# 🛠️ Tech Stack
-
-## Frontend
-
-| Technology | Usage |
-|------------|--------|
-| Next.js 16 | Framework |
-| TypeScript | Type Safety |
-| Tailwind CSS | Styling |
-| React | UI Components |
-
----
-
-## Backend
-
-| Technology | Usage |
-|------------|--------|
-| Next.js API Routes | Backend APIs |
-| Prisma ORM | Database Access |
-| Neon PostgreSQL | Database |
-
----
-
-## Authentication
-
-| Technology | Usage |
-|------------|--------|
-| Clerk | User Authentication |
-
----
-
-## Deployment
-
-| Technology | Usage |
-|------------|--------|
-| Vercel | Hosting |
-| Neon | Database Hosting |
-
----
-
-# 🚀 Live Demo
-
-### 🌍 Website
-
-👉 https://vet-care-ai.vercel.app/
-
----
-
-# ⚙️ Installation
-
-## 1️⃣ Clone Repository
+# Quick Start
 
 ```bash
-git clone https://github.com/yourusername/vetcare-ai.git
-cd vetcare-ai
-```
+git clone https://github.com/YOUR_USERNAME/VetCareAI.git
 
-## 2️⃣ Install Dependencies
+cd VetCareAI
 
-```bash
 npm install
-```
 
-## 3️⃣ Setup Environment Variables
-
-Create:
-
-```env
-.env.local
-```
-
-Add:
-
-```env
-DATABASE_URL=your_database_url
-
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_publishable_key
-
-CLERK_SECRET_KEY=your_secret_key
-```
-
----
-
-## 4️⃣ Setup Prisma
-
-```bash
-npx prisma generate
-
-npx prisma db push
-```
-
----
-
-## 5️⃣ Run Development Server
-
-```bash
 npm run dev
 ```
 
 Visit:
 
-```text
+```bash
 http://localhost:3000
 ```
 
----
+# Roadmap
 
-# 📂 Project Structure
+- [x] Authentication
+- [x] Disease Detection
+- [x] Appointment Booking
+- [x] Treatment Suggestions
+- [ ] Multi-language Support
+- [ ] Mobile Application
+- [ ] Video-Based Diagnosis
+- [ ] Emergency Consultation
 
-```bash
-VetCare-AI
-│
-├── public/
-│   ├── hero.png
-│
-├── src/
-│   ├── app/
-│   ├── components/
-│   ├── actions/
-│   ├── lib/
-│   ├── hooks/
-│
-├── prisma/
-│
-├── .env.local
-│
-├── package.json
-│
-└── README.md
-```
+# Developer
 
----
+## Abhay Kumar Yadav
 
-# 🔮 Future Enhancements
+B.Tech Information Technology
 
-- 🤖 Advanced AI Disease Detection
-- 🎥 Video-Based Analysis
-- 📍 Real-Time Vet Tracking
-- 💳 Online Consultation Payments
-- 📞 Emergency Vet Calling
-- 🌐 Multi-Language Support
-- 📱 Mobile Application
+Passionate about AI, Full-Stack Development, and Building Technology that Solves Real-World Problems.
 
----
+### Connect
 
-# 📈 Performance Goals
-
-- Fast Diagnosis
-- Responsive UI
-- Scalable Architecture
-- Secure Authentication
-- Optimized Database Queries
-
----
-
-# 🤝 Contributing
-
-Contributions are welcome!
-
-```bash
-Fork Repository
-
-Create Feature Branch
-
-Commit Changes
-
-Open Pull Request
-```
-
----
-
-# 👨‍💻 Developer
-
-### Abhay Kumar Yadav
-
-B.Tech Information Technology Student
-
-Passionate about:
-
-- Artificial Intelligence
-- Full Stack Development
-- Software Engineering
-- Scalable Systems
+- LinkedIn
+- Portfolio
+- GitHub
 
 ---
 
 <div align="center">
 
-### 🚀 Building the Future of Animal Healthcare with AI
+### 🚀 Reimagining Animal Healthcare Through Artificial Intelligence
 
-<img src="https://readme-typing-svg.herokuapp.com?size=20&duration=4000&color=10B981&center=true&vCenter=true&width=800&lines=Transforming+Animal+Healthcare+with+Artificial+Intelligence;Smart+Diagnosis+%7C+Vet+Connectivity+%7C+Modern+Healthcare;Built+with+❤️+by+Abhay+Kumar+Yadav" />
-
-<br/>
-
-⭐ Star the repository if you found it useful!
+⭐ Star this repository if you found it useful.
 
 </div>
