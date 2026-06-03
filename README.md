@@ -162,36 +162,7 @@ Visit:
 http://localhost:3000
 ```
 
-# Roadmap
 
-- [x] Authentication
-- [x] Disease Detection
-- [x] Appointment Booking
-- [x] Treatment Suggestions
-- [ ] Multi-language Support
-- [ ] Mobile Application
-- [ ] Video-Based Diagnosis
-- [ ] Emergency Consultation
-
-# Developer
-
-## Abhay Kumar Yadav
-
-B.Tech Information Technology
-
-Passionate about AI, Full-Stack Development, and Building Technology that Solves Real-World Problems.
-
-### Connect
-
-- LinkedIn
-- Portfolio
-- GitHub
-
----
-
-<div align="center">
-
-### 🚀 Reimagining Animal Healthcare Through Artificial Intelligence
 
 ⭐ Star this repository if you found it useful.
 
