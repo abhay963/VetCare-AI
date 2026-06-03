@@ -2,7 +2,7 @@
 
 # 🐾🤖 VetCare AI
 
-### AI-Powered Veterinary Healthcare Platform
+
 
 <img src="https://readme-typing-svg.herokuapp.com?size=28&duration=3500&color=4F46E5&center=true&vCenter=true&width=900&lines=AI-Powered+Veterinary+Healthcare+Platform;Smart+Disease+Detection+for+Animals;Intelligent+Vet+Booking+System;Built+with+Next.js+%2B+TypeScript+%2B+Prisma;Transforming+Animal+Healthcare+with+AI+🚀" />
 
